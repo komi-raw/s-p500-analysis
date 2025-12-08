@@ -1,10 +1,10 @@
 import os
 import csv
 
-def find_project_root(project_name="projetMegaDonne"):
+def find_project_root(project_name="s-p500-analysis"):
     """
     Remonte les dossiers depuis l'emplacement du script
-    jusqu'à trouver le dossier 'projetMegaDonne'.
+    jusqu'à trouver le dossier 's-p500-analysis'.
     """
     current = os.path.abspath(__file__)
     directory = os.path.dirname(current)
@@ -24,7 +24,7 @@ def csv_to_sql():
     stocks_folder = os.path.join(project_root, "Stocks")
 
     if not os.path.exists(stocks_folder):
-        raise FileNotFoundError("Le dossier 'Stocks' n'existe pas dans projetMegaDonne")
+        raise FileNotFoundError("Le dossier 'Stocks' n'existe pas dans s-p500-analysis")
 
     # Dossier de sortie
     output_folder = os.path.join(project_root, "SQL_Output")
