@@ -44,13 +44,13 @@ def csv_to_sql():
 
             reader = csv.DictReader(csvfile)
 
-            sqlfile.write("INSERT INTO price_data (file_name, date, open, low, high, close, volume)\nVALUES\n")
+            sqlfile.write("INSERT INTO price_data (company, date, open, low, high, close, volume)\nVALUES\n")
 
             first = True
 
             for row in reader:
                 line = (
-                    f"    ('{file}', "
+                    f"    ('{file.replace(".csv", "")}', "
                     f"'{row['date']}', "
                     f"{row['open']}, "
                     f"{row['low']}, "
