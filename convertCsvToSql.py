@@ -24,7 +24,9 @@ def csv_to_sql():
     stocks_folder = os.path.join(project_root, "Stocks")
 
     if not os.path.exists(stocks_folder):
-        raise FileNotFoundError("Le dossier 'Stocks' n'existe pas dans s-p500-analysis")
+        stocks_folder = os.path.join(project_root, "stocks")
+        if not os.path.exists(stocks_folder):
+            raise FileNotFoundError("Le dossier 'Stocks' n'existe pas dans s-p500-analysis")
 
     # Dossier de sortie
     output_folder = os.path.join(project_root, "SQL_Output")
@@ -37,16 +39,28 @@ def csv_to_sql():
 
         csv_path = os.path.join(stocks_folder, file)
         sql_filename = file.replace(".csv", ".sql")
+        sql_filename_2 = file.replace(".csv", "")
+        sql_filename_2 += "_company_dat.sql"
         sql_path = os.path.join(output_folder, sql_filename)
+        sql_path_2 = os.path.join(output_folder, sql_filename_2)
+
+        id = 0
 
         with open(csv_path, newline='', encoding="utf-8") as csvfile, \
-             open(sql_path, "w", encoding="utf-8") as sqlfile:
+             open(sql_path, "w", encoding="utf-8") as sqlfile, \
+             open(sql_path_2, "w", encoding="utf-8") as sqlfile2:
 
             reader = csv.DictReader(csvfile)
 
-            sqlfile.write("INSERT INTO price_data (company, date, open, low, high, close, volume)\nVALUES\n")
+            id = id + 1
 
+            sqlfile.write("INSERT INTO price_data (companyId, date, open, low, high, close, volume)\nVALUES\n")
+            sqlfile2.write("INSERT INTO company_data (companyIdx, code, name)\nVALUES\n")
             first = True
+            
+            line = (f"  ({id},'{file.replace(".csv", "")}', NULL)")
+
+            sqlfile2.write(line)
 
             for row in reader:
                 line = (
