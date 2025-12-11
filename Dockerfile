@@ -8,6 +8,6 @@ ENV MYSQL_DATABASE=sp500
 ENV MYSQL_USER=sp500_main
 ENV MYSQL_PASSWORD=sp500_main
 
-COPY ./stocks /stocks/
+VOLUME ["/var/lib/mysql"]
 
 EXPOSE 3306
