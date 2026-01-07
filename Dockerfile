@@ -1,5 +1,7 @@
 FROM mysql:8.0-debian
 
+COPY ["/docker-dat/my.cnf" , "/etc/mysql/my.cnf"]
+
 RUN apt-get update && apt-get install -y python3 python3-pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 

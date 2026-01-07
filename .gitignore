@@ -1,4 +1,5 @@
 stocks/*
 *.zip
 SQL_Output/*.sql
+SQL_Output/*.csv
 **/node_modules/**
