@@ -40,17 +40,6 @@ def csv_to_sql():
     name    VARCHAR(100),
     PRIMARY KEY (companyIdx)
 );
-                    
-CREATE TABLE price_data (
-    companyId INT NOT NULL,
-    date    DATETIME NOT NULL,
-    open    DECIMAL(10,4) NOT NULL,
-    low     DECIMAL(10,4) NOT NULL,
-    high    DECIMAL(10,4) NOT NULL,
-    close   DECIMAL(10,4) NOT NULL,
-    volume  BIGINT NOT NULL,
-    FOREIGN KEY(companyId) REFERENCES company_data(companyIdx)
-);
 """)
 
     id = 0
@@ -74,7 +63,17 @@ CREATE TABLE price_data (
 
             reader = csv.DictReader(csvfile)
 
-            sqlfile.write("INSERT INTO price_data (companyId, date, open, low, high, close, volume)\nVALUES\n")
+            sqlfile.write(f"""CREATE TABLE {file.replace(".csv", "")} (
+    companyId INT NOT NULL,
+    date    DATETIME NOT NULL,
+    open    DECIMAL(10,4) NOT NULL,
+    low     DECIMAL(10,4) NOT NULL,
+    high    DECIMAL(10,4) NOT NULL,
+    close   DECIMAL(10,4) NOT NULL,
+    volume  BIGINT NOT NULL
+);\n\n""")
+
+            sqlfile.write(f"INSERT INTO {file.replace(".csv", "")} (companyId, date, open, low, high, close, volume)\nVALUES\n")
             sqlfile2.write("INSERT INTO company_data (companyIdx, code, name)\nVALUES\n")
             first = True
             
