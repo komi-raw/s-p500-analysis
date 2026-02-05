@@ -14,3 +14,4 @@ sp500_back/.coverage/*
 sp500_back/.coverage.*
 .DS_Store
 sp500_back/.DS_Store
+/env_vir
