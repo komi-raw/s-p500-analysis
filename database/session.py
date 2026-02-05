@@ -1,12 +1,33 @@
-from sqlalchemy import create_engine, text
+# python
+# s-p500-analysis/sp500_back/database_connect.py
+import os
+from typing import Generator
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "mysql+pymysql://sp500_main:sp500_main@127.0.0.1:3306/sp500"
+DB_USER = os.getenv("DB_USER", "sp500_main")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "sp500_main")
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = os.getenv("DB_PORT", "3306")
+DB_NAME = os.getenv("DB_NAME", "sp500")
 
-engine = create_engine(
-    DATABASE_URL,
-    echo=True,
-    pool_pre_ping=True
+SQLALCHEMY_DATABASE_URL = (
+    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
 )
 
-with engine.connect() as connection:
-    print(connection.execute(text("SELECT DATABASE(), CURRENT_USER(), VERSION()")).one())
+# Engine SQLAlchemy
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
+
+# Session factory
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Base pour les modèles
+Base = declarative_base()
+
+# Dépendance FastAPI / utilitaire pour obtenir une session
+def get_db() -> Generator:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
