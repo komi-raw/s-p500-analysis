@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import router from "@/router";
 
-const goToDataView = () => router.push("/data/view");
+const props = defineProps(["title", "subtext", "isActive","path"]);
 
-defineProps(["title", "subtext", "isActive"]);
+const goToDataView = () => router.push(props.path);
+
 </script>
 
 <template>
