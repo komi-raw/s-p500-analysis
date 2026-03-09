@@ -10,6 +10,7 @@ import { routeInfo } from "@/router";
             :title="info.title"
             :subtext="info.subtext"
             :isActive="info.path !== '/'"
+            :path="info.path"
         ></HomeCard>
     </div>
 </template>
