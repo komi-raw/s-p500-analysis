@@ -1,0 +1,1020 @@
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'AAPL' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'ABBV' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'ABNB' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'ABT' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'ACGL' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ACN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ADBE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ADI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ADM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ADP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ADSK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AEE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AEP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AES_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AFL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AIG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AIZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AJG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AKAM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ALB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ALGN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ALLE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ALL (
+    companyId INT NOT NULL,
+    date    DATETIME NOT NULL,
+    open    DEC' at line 1
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AMAT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AMCR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AMD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AME_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'AMGN' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AMP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AMT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'AMZN' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ANET_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1050 (42S01) at line 1: Table 'AON' already exists
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AOS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/APTV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ARE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ATO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AVB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AVGO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AVY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AWK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AXON_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AXP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/AZO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/A_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BABA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BAC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BALL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BAX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BBY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BDX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BEN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1142 (42000) at line 1: CREATE command denied to user 'sp500_main'@'localhost' for table 'B'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BIIB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BKNG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BKR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BLDR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BLK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BMY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1142 (42000) at line 1: CREATE command denied to user 'sp500_main'@'localhost' for table 'B'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BRO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BSX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BXP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/BX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CAG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CAH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CARR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CAT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CBOE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CBRE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CCI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CCL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CDNS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CDW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CEG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CFG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CHD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CHRW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CHTR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CINF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CLX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CMCSA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CME_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CMG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CMI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CMS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CNC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CNP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COIN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/COST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CPAY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CPB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CPRT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CPT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CRL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CRM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CRWD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CSCO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CSGP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CSX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CTAS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CTRA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CTSH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CTVA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CVS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/CVX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/C_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DAL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DASH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DAY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DDOG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DECK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DELL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DGX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DHI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DHR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DIS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DLR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DLTR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DOC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DOV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DOW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DPZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DRI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DTE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DUK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DVA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DVN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/DXCM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/D_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EBAY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ECL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ED_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EFX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EIX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ELV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EME_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EMN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EMR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EOG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EPAM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EQIX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EQR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EQT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ERIE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ESS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ES_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ETN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ETR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EVRG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EXC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EXE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EXPD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EXPE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/EXR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FANG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FAST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FCX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FDS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FDX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FFIV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FICO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FIS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FITB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FOXA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FOX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FRT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FSLR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FTNT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/FTV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/F_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GDDY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GEHC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GEN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GEV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GILD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 11: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),
+    (80, '2025-03-18 18:55:00', 60.76, 60.75, 60.76, 60.75, 483.0),
+    (80, ' at line 44382
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GLW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GNRC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GOOGL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GPC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GPN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GRMN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/GWW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HAL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HAS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HBAN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HCA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HIG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HII_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HLT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HOLX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HON_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HOOD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HPE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HPQ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HRL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HSIC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HSY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HUBB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HUM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/HWM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IBKR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IBM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ICE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IDXX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IEX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IFF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/INCY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/INTC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/INTU_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/INVH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IPG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IQV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IRM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ISRG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ITW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/IVZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JBHT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JBL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JCI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JKHY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JNJ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/JPM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/J_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KDP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'KEYS (
+    companyId INT NOT NULL,
+    date    DATETIME NOT NULL,
+    open    DE' at line 1
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'KEY (
+    companyId INT NOT NULL,
+    date    DATETIME NOT NULL,
+    open    DEC' at line 1
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KHC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KIM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KKR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KLAC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KMB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KMI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KMX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/KVUE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/K_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LDOS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LEN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LHX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LII_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LIN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LKQ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LLY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LMT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LNT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LOW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LRCX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LULU_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LUV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LVS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LYB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/LYV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/L_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MAA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MAR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MAS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MCD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MCHP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MCK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MCO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MDLZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MDT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/META_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MET_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MGM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MHK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MKC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MLM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MMC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MMM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MNST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MOH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MOS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MPC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MPWR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MRK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MRNA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MSCI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MSFT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MSI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MTB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MTCH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MTD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/MU_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NCLH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NDAQ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NDSN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NEE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NEM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NFLX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NKE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NOC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NOW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NRG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NSC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NTAP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NTRS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NUE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NVDA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NVR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NWSA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NWS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/NXPI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ODFL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/OKE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/OMC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON (
+    companyId INT NOT NULL,
+    date    DATETIME NOT NULL,
+    open    DECI' at line 1
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ORCL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ORLY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/OTIS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/OXY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/O_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PANW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PAYC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PAYX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PCAR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PCG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PEG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PEP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PFE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PFG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PGR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PHM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PKG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PLD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PLTR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PNC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PNR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PNW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PODD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/POOL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PPG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PPL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PRU_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PSA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PSKY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PSX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PTC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PWR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/PYPL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/QCOM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RCL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/REGN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/REG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RJF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RMD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ROK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ROL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ROP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ROST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RSG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RTX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/RVTY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SBAC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SBUX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SCHW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SHW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SJM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SLB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SMCI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SNA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SNPS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SOLV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SPGI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SPG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SRE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/STE_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/STLD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/STT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/STX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/STZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SWKS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SWK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SYF_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SYK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/SYY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TAP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TDG_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TDY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TECH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TEL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TER_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TFC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TGT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TJX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TKO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TMO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TMUS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TPL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TPR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TRGP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TRMB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TROW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TRV_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TSCO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TSLA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TSN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TTD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TTWO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TXN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TXT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/TYL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/T_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UAL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UBER_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UDR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UHS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ULTA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UNH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UNP_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/UPS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/URI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/USB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VICI_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VLO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VLTO_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VMC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VRSK_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VRSN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VRTX_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VTRS_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VTR_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/VZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/V_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WAB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WAT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WBD_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WDAY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WDC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WEC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WELL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WFC_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WMB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WMT_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WRB_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WSM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WST_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WTW_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WYNN_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/WY_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/XEL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/XOM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/XYL_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/XYZ_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/YUM_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ZBH_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ZBRA_price_dat.sql imported.
+mysql: [Warning] Using a password on the command line interface can be insecure.
+/SQL/ZTS_price_dat.sql imported.

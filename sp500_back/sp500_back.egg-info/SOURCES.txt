@@ -1,0 +1,6 @@
+setup.py
+sp500_back.egg-info/PKG-INFO
+sp500_back.egg-info/SOURCES.txt
+sp500_back.egg-info/dependency_links.txt
+sp500_back.egg-info/requires.txt
+sp500_back.egg-info/top_level.txt

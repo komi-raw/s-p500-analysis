@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from route.prices import router as prices
 from route.companies import router as companies
+from route.globale import router as globale
 
 app = FastAPI(
         title="SP500 Analysis API",
@@ -12,7 +13,7 @@ app = FastAPI(
 # CORS middleware pour permettre les appels depuis le frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,6 +21,7 @@ app.add_middleware(
 
 app.include_router(prices)
 app.include_router(companies)
+app.include_router(globale)
 
 
 @app.get("/")

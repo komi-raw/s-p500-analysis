@@ -8,13 +8,14 @@ import { getAllPrices } from "@/fetchers/Company2Stat.ftc";
 import { ChartDefault } from "@/objects/ChartCM";
 import { CandlestickSeries } from "lightweight-charts";
 import { onBeforeMount, onMounted, ref } from "vue";
+import { SP500_CORP_TO_INFO } from "@/config/public-dat";
+import TextBox from "@/components/TextBox.vue";
 
 const loading = ref(true);
 const currentCompany = ref("");
-const companies = ref<CompanyID[]>([
-    { id: 1, code: "TOT" },
-    { id: 2, code: "TET" },
-]);
+const currentCompanyInfo = ref<any>({});
+const companies = ref<CompanyID[]>([]);
+const currentData = ref({});
 onBeforeMount(() => {
     getAllCompanies()
         .then((xAnswer) => {
@@ -27,7 +28,7 @@ onBeforeMount(() => {
 });
 let chart: any = null;
 onMounted(() => {
-    const data = [
+    const data : any= [
         { open: 10, high: 10.63, low: 9.49, close: 9.55, time: 1642427876 },
         { open: 9.55, high: 10.3, low: 9.42, close: 9.94, time: 1642514276 },
         { open: 9.94, high: 10.17, low: 9.92, close: 9.78, time: 1642600676 },
@@ -54,13 +55,18 @@ onMounted(() => {
 
     chart = new ChartDefault("chart", CandlestickSeries);
 
-    chart.registerData(data);
+    chart.registerData(data as any);
     chart.fitContent();
 });
+
+function loadInfoFor(corp: string) : any{
+    return SP500_CORP_TO_INFO.find(item => item.Symbol === corp);
+}
 
 function corpChanged(val: any) {
     loading.value = true;
     currentCompany.value = val.target.value;
+    currentCompanyInfo.value = loadInfoFor(currentCompany.value);
     getCompanyInfo(currentCompany.value).then((xAnswer) => {
         console.log(xAnswer);
     });
@@ -80,6 +86,7 @@ function corpChanged(val: any) {
                     .map((item) => [item.time, item]),
             ).values(),
         );
+        currentData.value = s;
         chart.registerData(s);
         chart.fitContent();
         loading.value = false;
@@ -113,21 +120,60 @@ function corpChanged(val: any) {
     </div>
     <section class="mainSubject flex flex-row">
         <div style="width: 60%" id="chart"></div>
-        <div style="width: 40%" class="bg-accent">
-            <div>
-                <span>Company : </span>
-                <select @change="corpChanged" name="corp" id="">
-                    <option
-                        v-for="(company, index) in companies"
-                        :value="company.code"
-                    >
-                        {{ company.code }}
-                    </option>
-                </select>
+        <div style="width: 40%" class="overflow-scroll bg-accent pl-5 pr-5 pt-2 pb-6 flex flex-col gap-2.5">
+            <div class="row self-center">
+                <h3 class="">View manager</h3>
             </div>
-            <div>
-                
+            <div class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span>Company : </span>
+                    <select @change="corpChanged" name="corp" id="">
+                        <option
+                            v-for="(company, index) in companies"
+                            :value="company.code"
+                        >
+                            {{ company.code }}
+                        </option>
+                    </select>
+                </div>
             </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">Name : </span>
+                    <span>{{ currentCompanyInfo.Security }}</span>
+                </div>
+            </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">GICS Sector : </span>
+                    <span>{{ currentCompanyInfo["GICS Sector"] }}</span>
+                </div>
+            </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">GICS Sub-Industry : </span>
+                    <span>{{ currentCompanyInfo["GICS Sub-Industry"] }}</span>
+                </div>
+            </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">Headquarters Location : </span>
+                    <span>{{ currentCompanyInfo["Headquarters Location"] }}</span>
+                </div>
+            </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">Date added : </span>
+                    <span>{{ currentCompanyInfo["Date added"] }}</span>
+                </div>
+            </div>
+            <div v-if="currentCompany !== ''" class="row self-start">
+                <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-3">Founded in : </span>
+                    <span>{{ currentCompanyInfo["Founded"] }}</span>
+                </div>
+            </div>
+            <TextBox v-if="currentCompany !== ''" :curdata="currentData" :companyname="currentCompanyInfo.Security" class="grow"/>
         </div>
     </section>
 </template>
