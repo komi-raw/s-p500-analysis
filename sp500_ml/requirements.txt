@@ -1,0 +1,7 @@
+# API ML dédiée PatchTST
+fastapi
+uvicorn[standard]
+torch
+transformers
+numpy
+scikit-learn

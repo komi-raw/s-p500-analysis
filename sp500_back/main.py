@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from route.prices import router as prices
 from route.companies import router as companies
 from route.globale import router as globale
-
+from route.prediction import router as prediction
 app = FastAPI(
         title="SP500 Analysis API",
         description="API for SP500 data analysis and visualization",
@@ -22,7 +22,7 @@ app.add_middleware(
 app.include_router(prices)
 app.include_router(companies)
 app.include_router(globale)
-
+app.include_router(prediction) 
 
 @app.get("/")
 def read_root():
