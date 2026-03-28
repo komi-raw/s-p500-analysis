@@ -27,11 +27,15 @@ function sendPrompt(){
     if(prompt === ""){
         return
     }
-    askIAPrompt(props.companyname, sendFinancial ? props.curdata : [], prompt).then((xAnswer) => {
+    askIAPrompt(props.companyname, sendFinancial ? props.curdata : [], prompt)
+        .then((xAnswer) => {
             ansbox.innerHTML += "CRW : " + xAnswer.data.response;
             ansbox.innerHTML += "<br/>";
         })
         .catch((xReject) => {
+            console.error("Erreur IA:", xReject);
+            ansbox.innerHTML += "CRW : Erreur - " + JSON.stringify(xReject);
+            ansbox.innerHTML += "<br/>";
         });
 }
 </script>
