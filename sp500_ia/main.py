@@ -62,14 +62,85 @@ Réponds directement et précisément à la question posée."""
 async def sql_proxy(req: Request):
     prompt = await req.json()
     try:
-        sql_prompt = "Génère uniquement une requête SQL sans explication ni backticks pour une base MySQL dont les tables sont nommées par symbole boursier S&P500 (ex: AAPL, TSLA...) avec colonnes: companyId INT, date DATETIME, open DECIMAL, low DECIMAL, high DECIMAL, close DECIMAL, volume BIGINT. Prompt: " + prompt["prompt"]
+        sql_prompt = """Tu es un générateur de requêtes SQL pour une base MySQL.
+Les tables sont nommées par symbole boursier S&P500 (ex: AAPL, TSLA, MSFT...).
+Chaque table a ces colonnes : companyId INT, date DATETIME, open DECIMAL, low DECIMAL, high DECIMAL, close DECIMAL, volume BIGINT.
+RÈGLES STRICTES :
+- Réponds UNIQUEMENT avec la requête SQL, rien d'autre
+- Pas de backticks, pas d'explication, pas de commentaires
+- Utilise LIMIT 100 maximum
+- La requête doit être valide MySQL
+Question : """ + prompt["prompt"]
+
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": sql_prompt}]
         )
-        sql_query = response.choices[0].message.content.replace("```sql", "").replace("```", "").strip()
+        
+        sql_query = response.choices[0].message.content
+        sql_query = sql_query.replace("```sql", "").replace("```", "").strip()
+        
+        # Vérifie que c'est bien du SQL
+        if not any(keyword in sql_query.upper() for keyword in ["SELECT", "SHOW", "DESCRIBE"]):
+            return {"error": "Le LLM n'a pas généré une requête SQL valide", "raw": sql_query}
+        
         db_response = requests.post(LOCAL_DB_URL, json={"query": sql_query})
-        db_response.raise_for_status()
-        return {"response": db_response.json()["response"]}
+        
+        if db_response.status_code != 200:
+            return {"error": f"Erreur SQL : {db_response.text}", "query": sql_query}
+            
+        result = db_response.json()
+        
+        # Formate la réponse
+        summary_prompt = f"Voici les résultats d'une requête SQL : {str(result)[:2000]}. Résume ces données en français en 3-4 phrases."
+        summary = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": summary_prompt}]
+        )
+        
+        return {
+            "response": summary.choices[0].message.content,
+            "query": sql_query,
+            "raw_data": result[:10] if isinstance(result, list) else result
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/ask/ia/analyst")
+async def analyst(req: Request):
+    prompt = await req.json()
+    try:
+        companies = prompt.get("companies", [])
+        user_prompt = prompt.get("prompt", "")
+        
+        # Récupère les données des entreprises sélectionnées
+        companies_data = {}
+        for company in companies:
+            try:
+                res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
+                data = res.json()
+                # Garde les 30 dernières entrées
+                companies_data[company] = data[-30:] if len(data) > 30 else data
+            except:
+                pass
+
+        system_prompt = """Tu es un expert en analyse financière et boursière du S&P500.
+Tu réponds en français de manière précise et structurée.
+Tu sais analyser les tendances, détecter les anomalies, comparer des entreprises.
+Quand tu as des données (open, high, low, close, volume, date) tu les utilises précisément.
+Tu détectes les tendances haussières/baissières, les pics de volume, les anomalies de prix."""
+
+        full_prompt = f"""Entreprises analysées : {', '.join(companies) if companies else 'aucune'}
+Données disponibles : {str(companies_data)[:3000]}
+Question : {user_prompt}"""
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": full_prompt}
+            ]
+        )
+        return {"response": response.choices[0].message.content}
     except Exception as e:
         return {"error": str(e)}
