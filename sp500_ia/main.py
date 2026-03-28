@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from groq import Groq
 import requests
 
 app = FastAPI()
@@ -14,77 +14,139 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
 LOCAL_DB_URL = "http://localhost:8000/db/query"
-
-class Prompt(BaseModel):
-    prompt: str
+client = Groq(api_key="SET_GROQ_API_KEY")
 
 @app.post("/ask/companyinfo/data")
 async def chat(req: Request):
     prompt = await req.json()
-    print("received ")
-    print(prompt)
-
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": "deepseek-r1",
-                "prompt": prompt["prompt"],
-                "stream": False
-            }
+        user_prompt = prompt["prompt"]
+        import json
+        import re
+        data_match = re.search(r'informations boursières sur l\'entreprise : (\[.*?\])', user_prompt, re.DOTALL)
+        if data_match:
+            try:
+                data = json.loads(data_match.group(1))
+                data = data[-50:]
+                user_prompt = user_prompt.replace(data_match.group(1), json.dumps(data))
+            except:
+                pass
+        
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """Tu es un assistant financier expert en analyse boursière du S&P500. 
+Tu réponds en français de manière précise et concise.
+Quand on te donne des données boursières (open, high, low, close, volume, date), tu les analyses correctement :
+- 'close' = prix de clôture
+- 'open' = prix d'ouverture  
+- 'high' = prix le plus haut de la journée
+- 'low' = prix le plus bas de la journée
+- 'volume' = nombre d'actions échangées
+Réponds directement et précisément à la question posée."""
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt
+                }
+            ]
         )
-
-        response.raise_for_status()
-        data = response.json()
-
-        return {
-            "response": data["response"]
-        }
-
+        return {"response": response.choices[0].message.content}
     except Exception as e:
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
 
 @app.post("/ask/ia/sqlproxy")
-async def chat(req: Request):
+async def sql_proxy(req: Request):
     prompt = await req.json()
-    print("received ")
-    print(prompt)
-
     try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": "deepseek-r1",
-                "prompt": "Tu dois me générer uniquement une requête sql avec une base à des tables qui ont comme nom un nom parmi [  \"TMUS\",  \"LHX\",  \"COO\",  \"WDC\",  \"F\",  \"CRWD\",  \"DE\",  \"FOX\",  \"BRK.B\",  \"AMAT\",  \"OTIS\",  \"APH\",  \"VLTO\",  \"OXY\",  \"A\",  \"EXR\",  \"PCAR\",  \"QCOM\",  \"ABT\",  \"BK\",  \"HSY\",  \"APTV\",  \"TPR\",  \"MPC\",  \"CNP\",  \"HUM\",  \"TSCO\",  \"AEE\",  \"RJF\",  \"AXP\",  \"AEP\",  \"BAC\",  \"SBUX\",  \"TPL\",  \"KDP\",  \"LLY\",  \"LRCX\",  \"SNPS\",  \"CTRA\",  \"DG\",  \"MCO\",  \"CPB\",  \"CPT\",  \"FRT\",  \"CFG\",  \"ALL\",  \"CPAY\",  \"SLB\",  \"CBRE\",  \"POOL\",  \"DVN\",  \"PEP\",  \"EFX\",  \"CMI\",  \"TJX\",  \"ULTA\",  \"TT\",  \"ODFL\",  \"PSKY\",  \"KR\",  \"BSX\",  \"EQT\",  \"TDG\",  \"CINF\",  \"RL\",  \"ZBRA\",  \"IRM\",  \"JKHY\",  \"MS\",  \"JBL\",  \"CSCO\",  \"TER\",  \"CEG\",  \"HLT\",  \"VTR\",  \"HD\",  \"D\",  \"OMC\",  \"ADI\",  \"GIS\",  \"GRMN\",  \"SOLV\",  \"APP\",  \"ADSK\",  \"RMD\",  \"APA\",  \"AMD\",  \"TMO\",  \"NDSN\",  \"AVY\",  \"HON\",  \"NTRS\",  \"DELL\",  \"KMI\",  \"ON\",  \"STT\",  \"EVRG\",  \"NDAQ\",  \"PNR\",  \"PH\",  \"USB\",  \"CSX\",  \"PODD\",  \"MO\",  \"RTX\",  \"AXON\",  \"VZ\",  \"IBKR\",  \"WBD\",  \"EA\",  \"IQV\",  \"SYY\",  \"HUBB\",  \"NVR\",  \"HWM\",  \"IFF\",  \"HST\",  \"JPM\",  \"MU\",  \"FDX\",  \"MTCH\",  \"WM\",  \"T\",  \"TXT\",  \"DLR\",  \"SO\",  \"CAH\",  \"MTB\",  \"LDOS\",  \"IT\",  \"VTRS\",  \"TRMB\",  \"BLDR\",  \"EL\",  \"COP\",  \"TEL\",  \"SWK\",  \"VST\",  \"WST\",  \"NXPI\",  \"WFC\",  \"DRI\",  \"KEY\",  \"DD\",  \"INCY\",  \"ZTS\",  \"IPG\",  \"WEC\",  \"EXE\",  \"XEL\",  \"TSN\",  \"TRGP\",  \"IR\",  \"AFL\",  \"LULU\",  \"TAP\",  \"CRL\",  \"INTC\",  \"MDLZ\",  \"BALL\",  \"NUE\",  \"DOW\",  \"UNP\",  \"TROW\",  \"MSCI\",  \"PPG\",  \"GEHC\",  \"BR\",  \"PANW\",  \"LII\",  \"AKAM\",  \"LYB\",  \"SYK\",  \"ACGL\",  \"CDNS\",  \"CME\",  \"SBAC\",  \"GPN\",  \"PTC\",  \"MAA\",  \"CVX\",  \"EXPE\",  \"WRB\",  \"NVDA\",  \"MSI\",  \"STLD\",  \"CCI\",  \"BBY\",  \"PFG\",  \"KVUE\",  \"MCD\",  \"J\",  \"KLAC\",  \"PSA\",  \"NFLX\",  \"KMX\",  \"SWKS\",  \"COF\",  \"STZ\",  \"LMT\",  \"ROST\",  \"ELV\",  \"ADBE\",  \"AJG\",  \"MMC\",  \"FANG\",  \"VLO\",  \"MTD\",  \"HOLX\",  \"LYV\",  \"FSLR\",  \"ZBH\",  \"STX\",  \"ROP\",  \"CMS\",  \"ALGN\",  \"AIG\",  \"RVTY\",  \"AAPL\",  \"GWW\",  \"DHI\",  \"CHRW\",  \"ISRG\",  \"META\",  \"AIZ\",  \"COST\",  \"K\",  \"DHR\",  \"DECK\",  \"MRK\",  \"TECH\",  \"DOC\",  \"V\",  \"LUV\",  \"CBOE\",  \"AVGO\",  \"GNRC\",  \"MKC\",  \"AWK\",  \"CRM\",  \"PPL\",  \"ABNB\",  \"TYL\",  \"CF\",  \"PYPL\",  \"DTE\",  \"LVS\",  \"HBAN\",  \"CAT\",  \"MRNA\",  \"FTNT\",  \"BMY\",  \"ERIE\",  \"PKG\",  \"LIN\",  \"NI\",  \"KHC\",  \"TSLA\",  \"DAL\",  \"MHK\",  \"PWR\",  \"DPZ\",  \"CSGP\",  \"BA\",  \"AMP\",  \"DDOG\",  \"NWSA\",  \"EME\",  \"ECL\",  \"RF\",  \"BXP\",  \"FDS\",  \"HIG\",  \"CMCSA\",  \"DGX\",  \"NOC\",  \"HAL\",  \"AME\",  \"HCA\",  \"ATO\",  \"CARR\",  \"CCL\",  \"DOV\",  \"PFE\",  \"FI\",  \"NEE\",  \"FFIV\",  \"GM\",  \"PM\",  \"TRV\",  \"AES\",  \"MOH\",  \"CL\",  \"MAR\",  \"DASH\",  \"KMB\",  \"WYNN\",  \"IBM\",  \"CHD\",  \"INVH\",  \"TKO\",  \"ETN\",  \"GLW\",  \"ALLE\",  \"NOW\",  \"INTU\",  \"DAY\",  \"BLK\",  \"VMC\",  \"CB\",  \"TDY\",  \"UHS\",  \"GL\",  \"DVA\",  \"COIN\",  \"BX\",  \"KKR\",  \"VRSK\",  \"ADP\",  \"O\",  \"ED\",  \"NCLH\",  \"FCX\",  \"PG\",  \"KIM\",  \"GDDY\",  \"ADM\",  \"FAST\",  \"FE\",  \"EPAM\",  \"PRU\",  \"TTWO\",  \"MAS\",  \"SMCI\",  \"SJM\",  \"LH\",  \"SCHW\",  \"AON\",  \"WMB\",  \"GEN\",  \"MA\",  \"GOOGL\",  \"APD\",  \"SNA\",  \"SRE\",  \"PNC\",  \"MLM\",  \"MGM\",  \"FOXA\",  \"ORLY\",  \"ROK\",  \"VICI\",  \"GD\",  \"GPC\",  \"YUM\",  \"BKNG\",  \"AMCR\",  \"WTW\",  \"MNST\",  \"GEV\",  \"EG\",  \"IP\",  \"UDR\",  \"RCL\",  \"ACN\",  \"AMGN\",  \"PLD\",  \"HAS\",  \"BIIB\",  \"IDXX\",  \"UAL\",  \"APO\",  \"UPS\",  \"XYL\",  \"UNH\",  \"CLX\",  \"REG\",  \"PSX\",  \"BG\",  \"EQR\",  \"LEN\",  \"PCG\",  \"MSFT\",  \"WY\",  \"MCHP\",  \"VRSN\",  \"KO\",  \"WDAY\",  \"EXPD\",  \"NSC\",  \"C\",  \"PNW\",  \"AVB\",  \"FICO\",  \"URI\",  \"LNT\",  \"EXC\",  \"SYF\",  \"CVS\",  \"HSIC\",  \"PLTR\",  \"NEM\",  \"REGN\",  \"SW\",  \"PHM\",  \"FITB\",  \"VRTX\",  \"TTD\",  \"OKE\",  \"HII\",  \"ALB\",  \"MOS\",  \"EQIX\",  \"BF.B\",  \"SPG\",  \"FTV\",  \"HOOD\",  \"MET\",  \"EIX\",  \"WAT\",  \"WELL\",  \"SHW\",  \"BAX\",  \"ABBV\",  \"GILD\",  \"HRL\",  \"DXCM\",  \"CDW\",  \"IVZ\",  \"CI\",  \"L\",  \"EMR\",  \"CPRT\",  \"CTVA\",  \"LKQ\",  \"HPE\",  \"TGT\",  \"TXN\",  \"COR\",  \"LW\",  \"WMT\",  \"CMG\",  \"EOG\",  \"DLTR\",  \"CHTR\",  \"NRG\",  \"AMT\",  \"ANET\",  \"TFC\",  \"ROL\",  \"ES\",  \"PGR\",  \"AOS\",  \"DUK\",  \"WSM\",  \"ESS\",  \"BEN\",  \"PAYX\",  \"JNJ\",  \"MPWR\",  \"CNC\",  \"NWS\",  \"LOW\",  \"MDT\",  \"UBER\",  \"CTAS\",  \"ORCL\",  \"EMN\",  \"IEX\",  \"BRO\",  \"EW\",  \"BDX\",  \"FIS\",  \"AMZN\",  \"XYZ\",  \"ETR\",  \"NKE\",  \"BKR\",  \"RSG\",  \"MMM\",  \"ITW\",  \"SPGI\",  \"ARE\",  \"GE\",  \"GS\",  \"STE\",  \"XOM\",  \"MCK\",  \"JCI\",  \"PAYC\",  \"HPQ\",  \"CTSH\",  \"NTAP\",  \"DIS\",  \"AZO\",  \"PEG\",  \"CAG\",  \"EBAY\",  \"WAB\",  \"JBHT\",  \"ICE\",  \"KEYS\",  \"BABA\"] et qui représente une entreprise du SP500 avec comme colonnes pour chaque table ( companyId INT NOT NULL, date    DATETIME NOT NULL, open    DECIMAL(10,4) NOT NULL, low     DECIMAL(10,4) NOT NULL, high    DECIMAL(10,4) NOT NULL, close   DECIMAL(10,4) NOT NULL, volume  BIGINT NOT NULL). Génère moi une requête sql correpondant au prompt suivant : " + prompt["prompt"],
-                "stream": False
-            }
+        tables_disponibles = ["AOS", "APD", "AVY", "AZO", "BALL", "BKNG", "BSX", "CARR", "CDNS", "CDW", "CFG", "CHD", "CHRW", "CHTR", "CI", "CL", "CLX", "CMCSA", "CMG", "CMI", "CMS", "CNC", "CNP", "COF", "COIN", "COO", "COP", "COR", "COST", "CPAY", "CPB", "CPRT", "CPT", "CRL", "CRM", "CSCO", "CSGP", "CSX", "CTAS", "CTRA", "CTSH", "CTVA", "CVS", "CVX", "D", "DAL", "DASH", "DAY", "DD", "DDOG", "DE", "DECK", "DELL", "DG", "DGX", "DHI", "DHR", "DIS", "DLR", "DLTR", "DOC", "DOV", "DOW", "DPZ", "DRI", "DTE", "DUK", "DVA", "DVN", "DXCM", "EA", "EBAY", "ECL", "ED", "EFX", "EG", "EIX", "EL", "ELV", "EME", "EMN", "EMR", "EOG", "EPAM", "EQIX", "EQR", "EQT", "ERIE", "ES", "ESS", "ETN", "ETR", "EVRG", "EW", "EXC", "EXE", "EXPD", "EXPE", "EXR", "F", "FANG", "FCX", "FDS", "FDX", "FE", "FFIV", "FI", "FICO", "FIS", "FITB", "FOX", "FOXA", "FRT", "FSLR", "FTNT", "FTV", "GD", "GDDY", "GE", "GEHC", "GEN", "GEV", "GILD", "GIS", "GL", "GLW", "GM", "GNRC", "GOOGL", "GPC", "GPN", "GRMN", "GS", "GWW", "HAL", "HAS", "HBAN", "HCA", "HD", "HIG", "HII", "HLT", "HOLX", "HON", "HOOD", "HPE", "HPQ", "HRL", "HSIC", "HST", "HSY", "HUBB", "HUM", "HWM", "IBKR", "IBM", "ICE", "IDXX", "IEX", "IFF", "INCY", "INTC", "INTU", "INVH", "IP", "IPG", "IQV", "IR", "IRM", "ISRG", "IT", "ITW", "IVZ", "J", "JBHT", "JBL", "JCI", "JKHY", "JNJ", "JPM", "K", "KDP", "KHC", "KIM", "KKR", "KLAC", "KMB", "KMI", "KMX", "KO", "KR", "KVUE", "L", "LDOS", "LEN", "LH", "LHX", "LII", "LIN", "LKQ", "LLY", "LMT", "LNT", "LOW", "LRCX", "LULU", "LUV", "LVS", "LW", "LYB", "LYV", "MA", "MAA", "MAR", "MAS", "MCD", "MCHP", "MCK", "MCO", "MDLZ", "MDT", "MET", "META", "MGM", "MHK", "MKC", "MLM", "MMC", "MMM", "MNST", "MO", "MOH", "MOS", "MPC", "MPWR", "MRK", "MRNA", "MS", "MSCI", "MSFT", "MSI", "MTB", "MTCH", "MTD", "MU", "NCLH", "NDAQ", "NDSN", "NEE", "NEM", "NFLX", "NI", "NKE", "NOC", "NOW", "NRG", "NSC", "NTAP", "NTRS", "NUE", "NVDA", "NVR", "NWS", "NWSA", "NXPI", "O", "ODFL", "OKE", "OMC", "ORCL", "ORLY", "OTIS", "OXY", "PANW", "PAYC", "PAYX", "PCAR", "PCG", "PEG", "PEP", "PFE", "PFG", "PGR", "PH", "PHM", "PKG", "PLD", "PLTR", "PM", "PNC", "PNR", "PNW", "PODD", "POOL", "PPG", "PPL", "PRU", "PSA", "PSKY", "PSX", "PTC", "PWR", "PYPL", "RCL", "REG", "REGN", "RF", "RJF", "RL", "RMD", "ROK", "ROL", "ROP", "ROST", "RSG", "RTX", "RVTY", "SBAC", "SCHW", "SHW", "SJM", "SLB", "SMCI", "SNA", "SNPS", "SO", "SOLV", "SPG", "SPGI", "SRE", "STE", "STLD", "STT", "STX", "STZ", "SW", "SWK", "SWKS", "SYF", "SYK", "SYY", "T", "TAP", "TDG", "TDY", "TECH", "TER", "TFC", "TGT", "TJX", "TKO", "TMO", "TMUS", "TPL", "TPR", "TRGP", "TRMB", "TROW", "TRV", "TSCO", "TSLA", "TSN", "TTD", "TTWO", "TXN", "TXT", "TYL", "UAL", "UBER", "UDR", "UHS", "ULTA", "UNH", "UNP", "UPS", "URI", "USB"]
+
+        sql_prompt = f"""Tu es un générateur de requêtes SQL pour une base MySQL.
+        Les tables disponibles sont UNIQUEMENT : {', '.join(tables_disponibles)}
+        N'utilise PAS d'autres tables que celles listées ci-dessus.
+        Chaque table a ces colonnes : companyId INT, date DATETIME, open DECIMAL, low DECIMAL, high DECIMAL, close DECIMAL, volume BIGINT.
+        RÈGLES STRICTES :
+        - Réponds UNIQUEMENT avec la requête SQL, rien d'autre
+        - Pas de backticks, pas d'explication, pas de commentaires
+        - Utilise LIMIT 100 maximum
+        - La requête doit être valide MySQL
+        - N'utilise QUE les tables listées ci-dessus
+        Question : """ + prompt["prompt"]
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": sql_prompt}]
         )
-
-        response.raise_for_status()
-        data = response.json()
-
-        data["response"].replace("```sql","")
-        data["response"].replace("```","")
-
-        response = requests.post(
-            LOCAL_DB_URL,
-            json={
-                "query": data["response"],
-            }
+        
+        sql_query = response.choices[0].message.content
+        sql_query = sql_query.replace("```sql", "").replace("```", "").strip()
+        
+        if not any(keyword in sql_query.upper() for keyword in ["SELECT", "SHOW", "DESCRIBE"]):
+            return {"error": "Le LLM n'a pas généré une requête SQL valide", "raw": sql_query}
+        
+        db_response = requests.post(LOCAL_DB_URL, json={"query": sql_query})
+        
+        if db_response.status_code != 200:
+            return {"error": f"Erreur SQL : {db_response.text}", "query": sql_query}
+            
+        result = db_response.json()
+        
+        summary_prompt = f"Voici les résultats d'une requête SQL : {str(result)[:2000]}. Résume ces données en français en 3-4 phrases."
+        summary = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": summary_prompt}]
         )
-
-        response.raise_for_status()
-        data = response.json()
-
+        
         return {
-            "response": data["response"]
+            "response": summary.choices[0].message.content,
+            "query": sql_query,
+            "raw_data": result[:10] if isinstance(result, list) else result
         }
-
     except Exception as e:
-        return {
-            "error": str(e)
-        }
+        return {"error": str(e)}
+
+@app.post("/ask/ia/analyst")
+async def analyst(req: Request):
+    prompt = await req.json()
+    try:
+        companies = prompt.get("companies", [])
+        user_prompt = prompt.get("prompt", "")
+        
+        companies_data = {}
+        for company in companies:
+            try:
+                res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
+                data = res.json()
+                companies_data[company] = data[-20:] if len(data) > 20 else data
+            except:
+                pass
+
+        system_prompt = """Tu es un expert en analyse financière et boursière du S&P500.
+Tu réponds en français de manière précise et structurée.
+Tu sais :
+- Analyser les tendances haussières/baissières
+- Comparer plusieurs entreprises entre elles (prix, volume, volatilité)
+- Détecter les anomalies : pics de volume inhabituels, variations de prix extrêmes, journées atypiques
+- Calculer des indicateurs : moyenne mobile, volatilité, variation en pourcentage
+- Identifier les meilleures et pires performances sur une période
+Quand tu compares plusieurs entreprises, structure ta réponse avec des sections claires par entreprise.
+Quand tu détectes des anomalies, explique pourquoi c'est anormal par rapport aux données habituelles."""
+
+        full_prompt = f"""Entreprises analysées : {', '.join(companies) if companies else 'aucune'}
+Nombre d'entreprises : {len(companies)}
+Données disponibles : {str(companies_data)[:6000]}
+Question : {user_prompt}"""
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": full_prompt}
+            ]
+        )
+        return {"response": response.choices[0].message.content}
+    except Exception as e:
+        return {"error": str(e)}

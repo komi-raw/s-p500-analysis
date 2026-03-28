@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import type { Component } from "vue";
 import Viewer from "../views/Viewer.vue";
+import AIAnalyst from "../views/AIAnalyst.vue";
 
 export type RouteType = {
     path: string;
@@ -20,6 +21,7 @@ export const homeRoute: RouteType = {
     subtext: "",
     navHeader: "Home",
 };
+
 export const routeInfo: RouteType[] = [
     {
         path: "/data/view",
@@ -30,28 +32,20 @@ export const routeInfo: RouteType[] = [
         navHeader: "Viewer",
     },
     {
+        path: "/ai/analyst",
+        name: "analyst",
+        component: AIAnalyst,
+        title: "AI Analyst",
+        subtext: "Analyse boursière intelligente propulsée par l'IA.",
+        navHeader: "AI Analyst",
+    },
+    {
         path: "/",
         name: "request",
         component: null,
         title: "Data editor",
         subtext: "",
         navHeader: "Editor",
-    },
-    {
-        path: "/",
-        name: "home",
-        component: null,
-        title: "",
-        subtext: "",
-        navHeader: "",
-    },
-    {
-        path: "/",
-        name: "home",
-        component: null,
-        title: "",
-        subtext: "",
-        navHeader: "",
     },
 ];
 
