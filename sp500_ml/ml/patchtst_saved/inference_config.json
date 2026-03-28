@@ -1,0 +1,5 @@
+{
+  "context_length": 64,
+  "prediction_length": 10,
+  "num_input_channels": 1
+}
