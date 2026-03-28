@@ -80,7 +80,6 @@ Question : """ + prompt["prompt"]
         sql_query = response.choices[0].message.content
         sql_query = sql_query.replace("```sql", "").replace("```", "").strip()
         
-        # Vérifie que c'est bien du SQL
         if not any(keyword in sql_query.upper() for keyword in ["SELECT", "SHOW", "DESCRIBE"]):
             return {"error": "Le LLM n'a pas généré une requête SQL valide", "raw": sql_query}
         
@@ -91,7 +90,6 @@ Question : """ + prompt["prompt"]
             
         result = db_response.json()
         
-        # Formate la réponse
         summary_prompt = f"Voici les résultats d'une requête SQL : {str(result)[:2000]}. Résume ces données en français en 3-4 phrases."
         summary = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -113,13 +111,11 @@ async def analyst(req: Request):
         companies = prompt.get("companies", [])
         user_prompt = prompt.get("prompt", "")
         
-        # Récupère les données des entreprises sélectionnées
         companies_data = {}
         for company in companies:
             try:
                 res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
                 data = res.json()
-                # Garde les 30 dernières entrées
                 companies_data[company] = data[-30:] if len(data) > 30 else data
             except:
                 pass
