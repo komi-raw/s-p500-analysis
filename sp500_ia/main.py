@@ -62,15 +62,19 @@ Réponds directement et précisément à la question posée."""
 async def sql_proxy(req: Request):
     prompt = await req.json()
     try:
-        sql_prompt = """Tu es un générateur de requêtes SQL pour une base MySQL.
-Les tables sont nommées par symbole boursier S&P500 (ex: AAPL, TSLA, MSFT...).
-Chaque table a ces colonnes : companyId INT, date DATETIME, open DECIMAL, low DECIMAL, high DECIMAL, close DECIMAL, volume BIGINT.
-RÈGLES STRICTES :
-- Réponds UNIQUEMENT avec la requête SQL, rien d'autre
-- Pas de backticks, pas d'explication, pas de commentaires
-- Utilise LIMIT 100 maximum
-- La requête doit être valide MySQL
-Question : """ + prompt["prompt"]
+        tables_disponibles = ["AOS", "APD", "AVY", "AZO", "BALL", "BKNG", "BSX", "CARR", "CDNS", "CDW", "CFG", "CHD", "CHRW", "CHTR", "CI", "CL", "CLX", "CMCSA", "CMG", "CMI", "CMS", "CNC", "CNP", "COF", "COIN", "COO", "COP", "COR", "COST", "CPAY", "CPB", "CPRT", "CPT", "CRL", "CRM", "CSCO", "CSGP", "CSX", "CTAS", "CTRA", "CTSH", "CTVA", "CVS", "CVX", "D", "DAL", "DASH", "DAY", "DD", "DDOG", "DE", "DECK", "DELL", "DG", "DGX", "DHI", "DHR", "DIS", "DLR", "DLTR", "DOC", "DOV", "DOW", "DPZ", "DRI", "DTE", "DUK", "DVA", "DVN", "DXCM", "EA", "EBAY", "ECL", "ED", "EFX", "EG", "EIX", "EL", "ELV", "EME", "EMN", "EMR", "EOG", "EPAM", "EQIX", "EQR", "EQT", "ERIE", "ES", "ESS", "ETN", "ETR", "EVRG", "EW", "EXC", "EXE", "EXPD", "EXPE", "EXR", "F", "FANG", "FCX", "FDS", "FDX", "FE", "FFIV", "FI", "FICO", "FIS", "FITB", "FOX", "FOXA", "FRT", "FSLR", "FTNT", "FTV", "GD", "GDDY", "GE", "GEHC", "GEN", "GEV", "GILD", "GIS", "GL", "GLW", "GM", "GNRC", "GOOGL", "GPC", "GPN", "GRMN", "GS", "GWW", "HAL", "HAS", "HBAN", "HCA", "HD", "HIG", "HII", "HLT", "HOLX", "HON", "HOOD", "HPE", "HPQ", "HRL", "HSIC", "HST", "HSY", "HUBB", "HUM", "HWM", "IBKR", "IBM", "ICE", "IDXX", "IEX", "IFF", "INCY", "INTC", "INTU", "INVH", "IP", "IPG", "IQV", "IR", "IRM", "ISRG", "IT", "ITW", "IVZ", "J", "JBHT", "JBL", "JCI", "JKHY", "JNJ", "JPM", "K", "KDP", "KHC", "KIM", "KKR", "KLAC", "KMB", "KMI", "KMX", "KO", "KR", "KVUE", "L", "LDOS", "LEN", "LH", "LHX", "LII", "LIN", "LKQ", "LLY", "LMT", "LNT", "LOW", "LRCX", "LULU", "LUV", "LVS", "LW", "LYB", "LYV", "MA", "MAA", "MAR", "MAS", "MCD", "MCHP", "MCK", "MCO", "MDLZ", "MDT", "MET", "META", "MGM", "MHK", "MKC", "MLM", "MMC", "MMM", "MNST", "MO", "MOH", "MOS", "MPC", "MPWR", "MRK", "MRNA", "MS", "MSCI", "MSFT", "MSI", "MTB", "MTCH", "MTD", "MU", "NCLH", "NDAQ", "NDSN", "NEE", "NEM", "NFLX", "NI", "NKE", "NOC", "NOW", "NRG", "NSC", "NTAP", "NTRS", "NUE", "NVDA", "NVR", "NWS", "NWSA", "NXPI", "O", "ODFL", "OKE", "OMC", "ORCL", "ORLY", "OTIS", "OXY", "PANW", "PAYC", "PAYX", "PCAR", "PCG", "PEG", "PEP", "PFE", "PFG", "PGR", "PH", "PHM", "PKG", "PLD", "PLTR", "PM", "PNC", "PNR", "PNW", "PODD", "POOL", "PPG", "PPL", "PRU", "PSA", "PSKY", "PSX", "PTC", "PWR", "PYPL", "RCL", "REG", "REGN", "RF", "RJF", "RL", "RMD", "ROK", "ROL", "ROP", "ROST", "RSG", "RTX", "RVTY", "SBAC", "SCHW", "SHW", "SJM", "SLB", "SMCI", "SNA", "SNPS", "SO", "SOLV", "SPG", "SPGI", "SRE", "STE", "STLD", "STT", "STX", "STZ", "SW", "SWK", "SWKS", "SYF", "SYK", "SYY", "T", "TAP", "TDG", "TDY", "TECH", "TER", "TFC", "TGT", "TJX", "TKO", "TMO", "TMUS", "TPL", "TPR", "TRGP", "TRMB", "TROW", "TRV", "TSCO", "TSLA", "TSN", "TTD", "TTWO", "TXN", "TXT", "TYL", "UAL", "UBER", "UDR", "UHS", "ULTA", "UNH", "UNP", "UPS", "URI", "USB"]
+
+        sql_prompt = f"""Tu es un générateur de requêtes SQL pour une base MySQL.
+        Les tables disponibles sont UNIQUEMENT : {', '.join(tables_disponibles)}
+        N'utilise PAS d'autres tables que celles listées ci-dessus.
+        Chaque table a ces colonnes : companyId INT, date DATETIME, open DECIMAL, low DECIMAL, high DECIMAL, close DECIMAL, volume BIGINT.
+        RÈGLES STRICTES :
+        - Réponds UNIQUEMENT avec la requête SQL, rien d'autre
+        - Pas de backticks, pas d'explication, pas de commentaires
+        - Utilise LIMIT 100 maximum
+        - La requête doit être valide MySQL
+        - N'utilise QUE les tables listées ci-dessus
+        Question : """ + prompt["prompt"]
 
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -116,18 +120,24 @@ async def analyst(req: Request):
             try:
                 res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
                 data = res.json()
-                companies_data[company] = data[-30:] if len(data) > 30 else data
+                companies_data[company] = data[-20:] if len(data) > 20 else data
             except:
                 pass
 
         system_prompt = """Tu es un expert en analyse financière et boursière du S&P500.
 Tu réponds en français de manière précise et structurée.
-Tu sais analyser les tendances, détecter les anomalies, comparer des entreprises.
-Quand tu as des données (open, high, low, close, volume, date) tu les utilises précisément.
-Tu détectes les tendances haussières/baissières, les pics de volume, les anomalies de prix."""
+Tu sais :
+- Analyser les tendances haussières/baissières
+- Comparer plusieurs entreprises entre elles (prix, volume, volatilité)
+- Détecter les anomalies : pics de volume inhabituels, variations de prix extrêmes, journées atypiques
+- Calculer des indicateurs : moyenne mobile, volatilité, variation en pourcentage
+- Identifier les meilleures et pires performances sur une période
+Quand tu compares plusieurs entreprises, structure ta réponse avec des sections claires par entreprise.
+Quand tu détectes des anomalies, explique pourquoi c'est anormal par rapport aux données habituelles."""
 
         full_prompt = f"""Entreprises analysées : {', '.join(companies) if companies else 'aucune'}
-Données disponibles : {str(companies_data)[:3000]}
+Nombre d'entreprises : {len(companies)}
+Données disponibles : {str(companies_data)[:6000]}
 Question : {user_prompt}"""
 
         response = client.chat.completions.create(
