@@ -36,7 +36,12 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-    chart = new ChartDefault("prediction-chart", CandlestickSeries);
+    chart = new ChartDefault("prediction-chart", CandlestickSeries, {
+        autoSize: true,
+        layout: { background: { color: "#222" }, textColor: "#DDD" },
+        grid: { vertLines: { color: "#444" }, horzLines: { color: "#444" } },
+        timeScale: { timeVisible: true, secondsVisible: false },
+    });
 
     predictionSeries = chart.chart.addSeries(LineSeries);
     predictionSeries.applyOptions({ color: "rgb(74, 222, 128)", lineWidth: 2, lineStyle: 1 });
