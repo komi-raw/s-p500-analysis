@@ -1,4 +1,8 @@
-Metadata-Version: 2.1
-Name: sp500-back
+Metadata-Version: 2.4
+Name: sp500_back
 Version: 0.1
 Summary: S&P 500 stock analysis , back end for python
+Requires-Dist: fastapi
+Requires-Dist: uvicorn[standard]
+Dynamic: requires-dist
+Dynamic: summary
