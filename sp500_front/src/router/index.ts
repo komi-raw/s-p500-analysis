@@ -4,6 +4,7 @@ import type { Component } from "vue";
 import Viewer from "../views/Viewer.vue";
 import AIAnalyst from "../views/AIAnalyst.vue";
 import PredictionView from "../views/PredictionView.vue";
+import SectorExplorer from "../views/SectorExplorer.vue";
 
 export type RouteType = {
     path: string;
@@ -47,6 +48,14 @@ export const routeInfo: RouteType[] = [
         title: "ML Prediction",
         subtext: "Prédiction des prix futurs par intelligence artificielle (PatchTST).",
         navHeader: "Prediction",
+    },
+    {
+        path: "/sector/explorer",
+        name: "sectorExplorer",
+        component: SectorExplorer,
+        title: "Sector Explorer",
+        subtext: "Prédictions ML + analyse IA croisée par secteur GICS du S&P 500.",
+        navHeader: "Sectors",
     },
     {
         path: "/",
