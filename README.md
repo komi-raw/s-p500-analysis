@@ -84,7 +84,7 @@ Prédictions de prix futurs via le modèle PatchTST.
 |-----------|---------|-------------|
 | Ticker | ex: AAPL, MSFT | Action S&P 500 |
 | Granularité | `day`, `hour`, `15min` | Pas de temps des prédictions |
-| Steps | 1 – 500 | Nombre de points à prédire |
+| Steps | 1 – 200 | Nombre de points à prédire |
 
 Affiche un graphique combinant historique réel (noir) et courbe de prédiction (orange), ainsi qu'un tableau des valeurs estimées avec dates.
 
