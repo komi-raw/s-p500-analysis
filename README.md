@@ -74,7 +74,6 @@ Ce script :
 - Construit l'image Docker MySQL 8.0
 - Crée le conteneur `my_sp500_db`
 - Attend que MySQL soit prêt
-- Charge tous les fichiers SQL depuis `SQL_Output/SQL_Output_compiled/SQL_Output/`
 
 > A effectuer une seule fois. Si le conteneur existe déjà, le script propose de le recréer.
 
