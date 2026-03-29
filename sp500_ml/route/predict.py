@@ -20,6 +20,7 @@ class PredictRequest(BaseModel):
         ...,
         description="Valeurs close brutes, au moins context_length points"
     )
+    steps: int = Field(default=None, ge=1, le=200, description="Nombre de pas à prédire (défaut : prediction_length du modèle)")
 
 
 class PredictResponse(BaseModel):
@@ -34,13 +35,26 @@ class PredictResponse(BaseModel):
 def run_prediction(body: PredictRequest):
     """
     Reçoit les close_values depuis l'API back et retourne les prédictions.
-    L'API back est responsable de récupérer les données MySQL et de construire
-    la liste close_values avant d'appeler cet endpoint.
+    Si steps > prediction_length du modèle, effectue des passes en cascade
+    en réinjectant les prédictions comme nouveau contexte.
     """
     cfg = get_config()
+    model_pred_len = cfg["prediction_length"]
+    target_steps = body.steps if body.steps is not None else model_pred_len
 
     try:
-        result = predict(body.ticker, body.close_values)
+        context = list(body.close_values)
+        all_predictions: List[float] = []
+        mode = "fallback"
+
+        while len(all_predictions) < target_steps:
+            result = predict(body.ticker, context)
+            mode = result["mode"]
+            batch = result["predictions"]
+            remaining = target_steps - len(all_predictions)
+            all_predictions.extend(batch[:remaining])
+            context = context[len(batch):] + batch
+
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
@@ -48,8 +62,8 @@ def run_prediction(body: PredictRequest):
 
     return PredictResponse(
         ticker=body.ticker,
-        mode=result["mode"],
+        mode=mode,
         context_length=cfg["context_length"],
-        prediction_length=cfg["prediction_length"],
-        predictions=result["predictions"],
+        prediction_length=len(all_predictions),
+        predictions=all_predictions,
     )

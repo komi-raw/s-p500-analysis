@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import type { Component } from "vue";
 import Viewer from "../views/Viewer.vue";
 import AIAnalyst from "../views/AIAnalyst.vue";
+import PredictionView from "../views/PredictionView.vue";
 
 export type RouteType = {
     path: string;
@@ -38,6 +39,14 @@ export const routeInfo: RouteType[] = [
         title: "AI Analyst",
         subtext: "Analyse boursière intelligente propulsée par l'IA.",
         navHeader: "AI Analyst",
+    },
+    {
+        path: "/ml/prediction",
+        name: "prediction",
+        component: PredictionView,
+        title: "ML Prediction",
+        subtext: "Prédiction des prix futurs par intelligence artificielle (PatchTST).",
+        navHeader: "Prediction",
     },
     {
         path: "/",

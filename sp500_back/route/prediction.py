@@ -5,7 +5,7 @@ Délègue l'inférence à l'API ML via HTTP (port 8001).
 Plus aucun import torch/transformers ici.
 """
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 import httpx
@@ -18,7 +18,7 @@ from database.price_dao import StockPriceDAO
 
 router = APIRouter(prefix="/api/prediction", tags=["prediction"])
 
-ML_API_URL     = os.getenv("ML_API_URL", "http://localhost:8001")
+ML_API_URL     = os.getenv("ML_API_URL", "http://localhost:8002")
 CONTEXT_LENGTH = int(os.getenv("CONTEXT_LENGTH", 64))
 
 
@@ -32,6 +32,7 @@ def _validate_ticker(db: Session, code: str) -> str:
 @router.get("/")
 def get_prediction(
     code: str = Query(..., description="Code boursier (ex: ABT, TSLA, MSFT)"),
+    steps: int = Query(None, ge=1, le=200, description="Nombre de pas à prédire"),
     db: Session = Depends(get_db),
 ):
     ticker = _validate_ticker(db, code)
@@ -47,14 +48,16 @@ def get_prediction(
     rows       = list(reversed(rows))   # DESC → ASC
     close_vals = [float(r.close) for r in rows]
     last_date  = rows[-1].date
-    prev_date  = rows[-2].date
 
     # 2. Appel API ML
     try:
+        payload: dict = {"ticker": ticker, "close_values": close_vals}
+        if steps is not None:
+            payload["steps"] = steps
         resp = httpx.post(
             f"{ML_API_URL}/predict/",
-            json={"ticker": ticker, "close_values": close_vals},
-            timeout=30.0,
+            json=payload,
+            timeout=60.0,
         )
         resp.raise_for_status()
         ml = resp.json()
@@ -68,22 +71,17 @@ def get_prediction(
     except httpx.HTTPStatusError as e:
         raise HTTPException(status_code=502, detail=f"Erreur API ML : {e.response.text}")
 
-    # 3. Timestamps estimés
+    # 3. Timestamps estimés — 1 jour par step (indépendant de la granularité des données)
     try:
-        last_dt  = last_date if isinstance(last_date, datetime) else datetime.fromisoformat(str(last_date))
-        prev_dt  = prev_date if isinstance(prev_date, datetime) else datetime.fromisoformat(str(prev_date))
-        interval = last_dt - prev_dt
+        last_dt = last_date if isinstance(last_date, datetime) else datetime.fromisoformat(str(last_date))
     except Exception:
-        last_dt = interval = None
+        last_dt = None
 
     steps = []
     for i, val in enumerate(ml["predictions"], start=1):
         step = {"step": i, "predicted_close": round(val, 4)}
-        if last_dt and interval:
-            try:
-                step["estimated_date"] = (last_dt + interval * i).isoformat()
-            except Exception:
-                pass
+        if last_dt:
+            step["estimated_date"] = (last_dt + timedelta(days=i)).strftime("%d/%m/%Y")
         steps.append(step)
 
     return {

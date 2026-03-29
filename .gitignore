@@ -2,16 +2,32 @@ stocks/*
 *.zip
 SQL_Output/*.sql
 SQL_Output/*.csv
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.egg-info/
+**/.ipynb_checkpoints/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.coverage
+**/.coverage.*
+
+# Environnements virtuels
+venv/
+.venv/
+env_vir/
+
+# Node
 **/node_modules/**
-sp500_back/__pycache__/*
-sp500_back/.ipynb_checkpoints/*
-sp500_back/venv/*
-sp500_back/.vscode/*
-sp500_back/.idea/*
-sp500_back/.pytest_cache/*
-sp500_back/.mypy_cache/*
-sp500_back/.coverage/*
-sp500_back/.coverage.*
+
+# IDE
+.idea/
+.vscode/
+
+# OS
 .DS_Store
-sp500_back/.DS_Store
-/env_vir
+
+# Logs
+*.log
