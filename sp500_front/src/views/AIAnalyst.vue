@@ -158,7 +158,7 @@ async function sendMessage() {
                     v-model="companySearch"
                     type="text"
                     placeholder="Rechercher..."
-                    class="bg-zinc-800 rounded px-2 py-1 text-sm outline-none border border-zinc-700 focus:border-zinc-500"
+                    class="bg-black rounded px-2 py-1 text-sm outline-none border border-zinc-700 focus:border-zinc-500"
                 />
                 <!-- Tout sélectionner -->
                 <button
@@ -249,7 +249,7 @@ async function sendMessage() {
         <div class="flex gap-2">
             <textarea v-model="inputMessage" @keydown.enter.prevent="sendMessage"
                 placeholder="Ex: Donne moi les 20 derniers prix de clôture de TSLA"
-                class="flex-1 bg-zinc-800 rounded p-2 text-sm resize-none" rows="2"></textarea>
+                class="flex-1 bg-black rounded p-2 text-sm resize-none" rows="2"></textarea>
             <button @click="sendMessage" :disabled="loading"
                 class="bg-zinc-700 hover:bg-zinc-600 rounded px-4 py-2 text-sm transition-all">
                 Envoyer
