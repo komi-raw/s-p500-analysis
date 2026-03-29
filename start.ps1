@@ -143,6 +143,7 @@ function Start-Service {
     $logErr = "$LOG_DIR\${name}_err.log"
     info "Demarrage de $name (port $port)..."
 
+    # $env:GROQ_API_KEY est heritee automatiquement par les processus enfants
     $proc = Start-Process `
         -FilePath $UVICORN `
         -ArgumentList $uvicornArgs `
@@ -151,9 +152,6 @@ function Start-Service {
         -RedirectStandardError  $logErr `
         -WindowStyle Hidden `
         -PassThru
-
-    # Passer la cle Groq via variable d'environnement du process
-    [System.Environment]::SetEnvironmentVariable("GROQ_API_KEY", $env:GROQ_API_KEY, "Process")
 
     "$name $($proc.Id)" | Add-Content $PID_FILE
 
@@ -184,8 +182,8 @@ Start-Service "sp500_ia"   "sp500_ia"   8001 "main:app --port 8001"
 # Frontend
 info "Demarrage du frontend Vue (port 5173)..."
 $frontProc = Start-Process `
-    -FilePath "npm" `
-    -ArgumentList "run", "dev", "--", "--host" `
+    -FilePath "cmd.exe" `
+    -ArgumentList "/c", "npm run dev -- --host" `
     -WorkingDirectory "$ROOT_DIR\sp500_front" `
     -RedirectStandardOutput "$LOG_DIR\sp500_front.log" `
     -RedirectStandardError  "$LOG_DIR\sp500_front_err.log" `

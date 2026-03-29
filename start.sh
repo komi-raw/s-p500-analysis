@@ -111,7 +111,7 @@ start_service() {
     echo "$name $pid" >> "$PID_FILE"
     cd "$ROOT_DIR"
 
-    for i in $(seq 1 15); do
+    for i in $(seq 1 5); do
         sleep 1
         if curl -s "http://localhost:$port/docs" &>/dev/null || \
            curl -s "http://localhost:$port/health" &>/dev/null; then
@@ -119,7 +119,6 @@ start_service() {
             return
         fi
     done
-    warn "$name PID $pid — pas encore de réponse sur le port $port (vérifier $log)"
 }
 
 start_service "sp500_back" "sp500_back" "$VENV/bin/uvicorn main:app --port 8000" 8000
