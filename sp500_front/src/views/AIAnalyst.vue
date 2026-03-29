@@ -83,6 +83,25 @@ function drawChart(canvasId: string, data: any[]) {
     });
 }
 
+function exportConversation() {
+    if (!messages.value.length) return;
+    const header = `AI Analyst — Export
+Entreprises : ${selectedCompanies.value.join(", ") || "aucune"}
+Mode : ${mode.value}
+Date : ${new Date().toLocaleString()}
+${"=".repeat(60)}\n\n`;
+    const body = messages.value
+        .map((m) => `[${m.role === "user" ? "Vous" : "AI"}]\n${m.content}`)
+        .join("\n\n" + "-".repeat(40) + "\n\n");
+    const blob = new Blob([header + body], { type: "text/plain;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `analyse_ia_${new Date().toISOString().slice(0, 10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 async function sendMessage() {
     if (!inputMessage.value.trim()) return;
 
@@ -216,6 +235,15 @@ async function sendMessage() {
             <div v-if="loading" class="self-start text-zinc-400 text-sm animate-pulse">
                 L'IA réfléchit...
             </div>
+        </div>
+
+        <div v-if="messages.length" class="flex justify-end">
+            <button
+                @click="exportConversation"
+                class="text-xs px-3 py-1.5 rounded border border-green-700 text-green-400 hover:bg-green-900/30 transition-colors"
+            >
+                ↓ Exporter la conversation
+            </button>
         </div>
 
         <div class="flex gap-2">

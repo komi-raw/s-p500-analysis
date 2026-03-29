@@ -151,6 +151,54 @@ En tant qu'expert financier, analyse ces prédictions :
     }
 }
 
+function exportResults() {
+    const hasML = Object.keys(mlResults.value).length > 0;
+    if (!hasML && !aiResponse.value) return;
+
+    // CSV des prédictions ML
+    if (hasML) {
+        const rows = [
+            [`Secteur : ${activeSector.value.name}`, `Jours prédits : ${steps.value}`, `Date export : ${new Date().toLocaleString()}`],
+            [],
+            ["Ticker", "Dernier cours ($)", "Prédiction finale ($)", "Variation (%)", ...Array.from({ length: steps.value }, (_, i) => `J+${i + 1}`)],
+        ];
+        for (const [ticker, r] of Object.entries(mlResults.value)) {
+            const last = r.last_known_close;
+            const final = r.predictions[r.predictions.length - 1]?.predicted_close ?? "";
+            const pct = final ? (((final as number) - last) / last * 100).toFixed(2) : "";
+            const allPreds = r.predictions.map((p) => p.predicted_close);
+            rows.push([ticker, last.toFixed(2), (final as number).toFixed(2), pct, ...allPreds.map((v) => v.toFixed(4))]);
+        }
+        const csv = rows.map((r) => r.join(";")).join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sector_ml_${activeSector.value.name.replace(/ /g, "_")}_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // TXT de l'analyse IA
+    if (aiResponse.value) {
+        const content = `Sector Explorer — Analyse IA
+Secteur : ${activeSector.value.name}
+Entreprises : ${Object.keys(mlResults.value).join(", ")}
+Jours prédits : ${steps.value}
+Date : ${new Date().toLocaleString()}
+${"=".repeat(60)}
+
+${aiResponse.value}`;
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sector_ia_${activeSector.value.name.replace(/ /g, "_")}_${new Date().toISOString().slice(0, 10)}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+}
+
 function pct_raw(end: number, start: number): number {
     return ((end - start) / start) * 100;
 }
@@ -263,9 +311,17 @@ function sparklinePoints(predictions: PredictionResult["predictions"], last: num
             <div class="xl:col-span-3 space-y-4">
                 <!-- ML prediction cards -->
                 <div v-if="Object.keys(mlResults).length">
-                    <h2 class="text-white font-semibold mb-3">
-                        Prédictions ML — {{ activeSector.name }}
-                    </h2>
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-white font-semibold">
+                            Prédictions ML — {{ activeSector.name }}
+                        </h2>
+                        <button
+                            @click="exportResults"
+                            class="text-xs px-3 py-1.5 rounded border border-blue-600 text-blue-400 hover:bg-blue-900/30 transition-colors"
+                        >
+                            ↓ Exporter (CSV + analyse)
+                        </button>
+                    </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                         <div
                             v-for="(result, ticker) in mlResults"

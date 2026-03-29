@@ -57,6 +57,30 @@ async function corpChanged(val: any) {
     predictionSeries.setData([]);
 }
 
+function exportCSV() {
+    if (!predictionResult.value) return;
+    const r = predictionResult.value;
+    const granOpt = currentGranOpt();
+    const rows = [
+        ["Ticker", r.ticker],
+        ["Mode", r.prediction_mode],
+        ["Dernier close", r.last_known_close],
+        ["Dernière date", r.last_known_date],
+        ["Granularité", granularity.value],
+        [],
+        [granOpt.stepLabel, "Close estimé ($)", granOpt.dateLabel],
+        ...r.predictions.map((p) => [p.step, p.predicted_close, p.estimated_date ?? ""]),
+    ];
+    const csv = rows.map((row) => row.join(";")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `prediction_${r.ticker}_${granularity.value}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 async function runPrediction() {
     if (!currentCompany.value) return;
     predicting.value = true;
@@ -221,6 +245,16 @@ async function runPrediction() {
                         <span class="mr-3">Dernière date : </span>
                         <span>{{ predictionResult.last_known_date }}</span>
                     </div>
+                </div>
+
+                <!-- Export -->
+                <div class="row self-start mt-2">
+                    <button
+                        @click="exportCSV"
+                        style="background-color: #1a3a2a; border: 1px solid rgb(74,222,128); border-radius: 5px; padding: 4px 12px; cursor: pointer; font-size: 0.82em; color: rgb(74,222,128);"
+                    >
+                        ↓ Exporter CSV
+                    </button>
                 </div>
 
                 <!-- Tableau des prédictions -->
