@@ -15,15 +15,15 @@ if (-not (Test-Path $PID_FILE)) {
 }
 
 Get-Content $PID_FILE | ForEach-Object {
-    $parts = $_ -split " "
-    $name  = $parts[0]
-    $pid   = [int]$parts[1]
+    $parts   = $_ -split " "
+    $name    = $parts[0]
+    $procId  = [int]$parts[1]
     try {
-        $proc = Get-Process -Id $pid -ErrorAction Stop
-        Stop-Process -Id $pid -Force
-        ok "Arrete : $name (PID $pid)"
+        $proc = Get-Process -Id $procId -ErrorAction Stop
+        Stop-Process -Id $procId -Force
+        ok "Arrete : $name (PID $procId)"
     } catch {
-        warn "Deja arrete ou introuvable : $name (PID $pid)"
+        warn "Deja arrete ou introuvable : $name (PID $procId)"
     }
 }
 
