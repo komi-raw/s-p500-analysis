@@ -127,7 +127,7 @@ function corpChanged(val: any) {
             <div class="row self-start">
                 <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
                     <span>Company : </span>
-                    <select @change="corpChanged" name="corp" id="">
+                    <select @change="corpChanged" name="corp" id="" style="background-color: #1a1a1a; color: #DDD; border: 1px solid #555; border-radius: 3px; padding: 2px 6px;">
                         <option
                             v-for="(company, index) in companies"
                             :value="company.code"

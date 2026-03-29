@@ -152,7 +152,7 @@ async function runPrediction() {
             <div class="row self-start">
                 <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
                     <span>Company : </span>
-                    <select @change="corpChanged" name="corp">
+                    <select @change="corpChanged" name="corp" style="background-color: #1a1a1a; color: #DDD; border: 1px solid #555; border-radius: 3px; padding: 2px 6px;">
                         <option value="">-- Choisir --</option>
                         <option v-for="company in companies" :key="company.code" :value="company.code">
                             {{ company.code }}
@@ -184,7 +184,7 @@ async function runPrediction() {
                         type="number"
                         min="1"
                         max="200"
-                        style="width: 60px; background: #333; border: 1px solid #555; border-radius: 3px; padding: 2px 6px; color: #DDD;"
+                        style="width: 60px; background: #1a1a1a; border: 1px solid #555; border-radius: 3px; padding: 2px 6px; color: #DDD;"
                     />
                 </div>
             </div>

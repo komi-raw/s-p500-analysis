@@ -62,7 +62,7 @@ function sendPrompt(){
 }
 
 .prompt-box{
-    background-color: rgb(44, 44, 44);
+    background-color: rgb(20, 20, 20);
 }
 
 .prompt-send{
