@@ -119,7 +119,7 @@ async def analyst(req: Request):
         companies_data = {}
         for company in companies:
             try:
-                res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
+                res = requests.get(f"http://localhost:8000/api/price/list?code={company}")
                 data = res.json()
                 companies_data[company] = data[-20:] if len(data) > 20 else data
             except:
