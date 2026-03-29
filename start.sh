@@ -60,6 +60,18 @@ command -v npm  &>/dev/null || fail "npm introuvable."
 ok "Node.js $(node --version)"
 ok "npm     $(npm --version)"
 
+# ---- MySQL Docker ---------------------------------------------------
+info "Démarrage de MySQL (Docker)..."
+CONTAINER="my_sp500_db"
+if docker ps --filter "name=^${CONTAINER}$" --format '{{.Names}}' 2>/dev/null | grep -q "^${CONTAINER}$"; then
+    ok "MySQL déjà en cours d'exécution."
+elif docker ps -a --filter "name=^${CONTAINER}$" --format '{{.Names}}' 2>/dev/null | grep -q "^${CONTAINER}$"; then
+    docker start "$CONTAINER" > /dev/null
+    ok "MySQL démarré."
+else
+    fail "Conteneur '$CONTAINER' introuvable. Créez-le d'abord avec dockerBuild.sh et dockerRun.sh."
+fi
+
 # ---- Arrêter les services existants si déjà lancés ------------------
 if [ -f "$PID_FILE" ]; then
     warn "Des services sont peut-être déjà en cours. Arrêt préalable..."
@@ -111,14 +123,7 @@ start_service() {
     echo "$name $pid" >> "$PID_FILE"
     cd "$ROOT_DIR"
 
-    for i in $(seq 1 5); do
-        sleep 1
-        if curl -s "http://localhost:$port/docs" &>/dev/null || \
-           curl -s "http://localhost:$port/health" &>/dev/null; then
-            ok "$name démarré  →  http://localhost:$port   (PID $pid)"
-            return
-        fi
-    done
+    ok "$name lancé  →  http://localhost:$port   (PID $pid)"
 }
 
 start_service "sp500_back" "sp500_back" "$VENV/bin/uvicorn main:app --port 8000" 8000
@@ -132,14 +137,7 @@ npm run dev -- --host > "$LOG_DIR/sp500_front.log" 2>&1 &
 FRONT_PID=$!
 echo "sp500_front $FRONT_PID" >> "$PID_FILE"
 cd "$ROOT_DIR"
-
-for i in $(seq 1 20); do
-    sleep 1
-    if curl -s "http://localhost:5173" &>/dev/null; then
-        ok "sp500_front démarré  →  http://localhost:5173   (PID $FRONT_PID)"
-        break
-    fi
-done
+ok "sp500_front lancé  →  http://localhost:5173   (PID $FRONT_PID)"
 
 # ---- Résumé ----------------------------------------------------------
 echo ""

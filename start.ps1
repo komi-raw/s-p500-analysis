@@ -83,6 +83,20 @@ if (Test-Path $PID_FILE) {
 New-Item -ItemType Directory -Force -Path $LOG_DIR | Out-Null
 "" | Set-Content $PID_FILE
 
+# ---- MySQL Docker ---------------------------------------------------
+info "Demarrage de MySQL (Docker)..."
+$CONTAINER = "my_sp500_db"
+$running = docker ps  --filter "name=^${CONTAINER}$" --format "{{.Names}}" 2>$null
+$exists  = docker ps -a --filter "name=^${CONTAINER}$" --format "{{.Names}}" 2>$null
+if ($running -eq $CONTAINER) {
+    ok "MySQL deja en cours d'execution."
+} elseif ($exists -eq $CONTAINER) {
+    docker start $CONTAINER | Out-Null
+    ok "MySQL demarre."
+} else {
+    fail "Conteneur '$CONTAINER' introuvable. Creez-le d'abord avec dockerBuild.sh et dockerRun.sh."
+}
+
 # ---- Espace disque --------------------------------------------------
 info "Verification de l'espace disque..."
 $drive     = Split-Path -Qualifier $ROOT_DIR
@@ -143,7 +157,6 @@ function Start-Service {
     $logErr = "$LOG_DIR\${name}_err.log"
     info "Demarrage de $name (port $port)..."
 
-    # $env:GROQ_API_KEY est heritee automatiquement par les processus enfants
     $proc = Start-Process `
         -FilePath $UVICORN `
         -ArgumentList $uvicornArgs `
@@ -154,25 +167,7 @@ function Start-Service {
         -PassThru
 
     "$name $($proc.Id)" | Add-Content $PID_FILE
-
-    $started = $false
-    for ($i = 0; $i -lt 15; $i++) {
-        Start-Sleep 1
-        try {
-            $null = Invoke-WebRequest "http://localhost:$port/docs" -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
-            $started = $true; break
-        } catch {}
-        try {
-            $null = Invoke-WebRequest "http://localhost:$port/health" -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
-            $started = $true; break
-        } catch {}
-    }
-
-    if ($started) {
-        ok "$name demarre  ->  http://localhost:$port   (PID $($proc.Id))"
-    } else {
-        warn "$name PID $($proc.Id) -- pas encore de reponse sur le port $port (verifier $log)"
-    }
+    ok "$name lance  ->  http://localhost:$port   (PID $($proc.Id))"
 }
 
 Start-Service "sp500_back" "sp500_back" 8000 "main:app --port 8000"
@@ -191,20 +186,7 @@ $frontProc = Start-Process `
     -PassThru
 
 "sp500_front $($frontProc.Id)" | Add-Content $PID_FILE
-
-$started = $false
-for ($i = 0; $i -lt 20; $i++) {
-    Start-Sleep 1
-    try {
-        $null = Invoke-WebRequest "http://localhost:5173" -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop
-        $started = $true; break
-    } catch {}
-}
-if ($started) {
-    ok "sp500_front demarre  ->  http://localhost:5173   (PID $($frontProc.Id))"
-} else {
-    warn "sp500_front PID $($frontProc.Id) -- pas encore de reponse (verifier $LOG_DIR\sp500_front.log)"
-}
+ok "sp500_front lance  ->  http://localhost:5173   (PID $($frontProc.Id))"
 
 # ---- Resume ---------------------------------------------------------
 Write-Host ""
