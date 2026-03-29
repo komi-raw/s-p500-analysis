@@ -83,6 +83,22 @@ if (Test-Path $PID_FILE) {
 New-Item -ItemType Directory -Force -Path $LOG_DIR | Out-Null
 "" | Set-Content $PID_FILE
 
+# ---- Espace disque --------------------------------------------------
+info "Verification de l'espace disque..."
+$drive     = Split-Path -Qualifier $ROOT_DIR
+$freeBytes = (Get-PSDrive ($drive.TrimEnd(':'))).Free
+$freeGB    = [math]::Round($freeBytes / 1GB, 1)
+
+if ($freeBytes -lt 6GB) {
+    fail @"
+Espace disque insuffisant : ${freeGB} GB disponible, minimum 6 GB requis.
+torch + transformers pesent ~4-5 GB.
+
+Liberez de l'espace sur $drive puis relancez le script.
+"@
+}
+ok "Espace disque : ${freeGB} GB disponible."
+
 # ---- Environnement Python (venv) ------------------------------------
 info "Configuration de l'environnement Python (venv)..."
 
@@ -92,22 +108,24 @@ if (-not (Test-Path "$VENV\Scripts\python.exe")) {
 }
 
 $PYTHON_VENV = "$VENV\Scripts\python.exe"
-$PIP         = "$VENV\Scripts\pip.exe"
 $UVICORN     = "$VENV\Scripts\uvicorn.exe"
 
-info "Installation des dependances Python..."
-& $PIP install --quiet --upgrade pip
-& $PIP install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql groq requests numpy scikit-learn
+info "Mise a jour de pip..."
+# Sur Windows, pip ne peut pas se mettre a jour lui-meme via pip.exe -- utiliser python -m pip
+& $PYTHON_VENV -m pip install --quiet --upgrade pip
 
-$torchCheck = & $PYTHON_VENV -c "import torch" 2>$null
+info "Installation des dependances Python..."
+& $PYTHON_VENV -m pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql groq requests numpy scikit-learn
+
+& $PYTHON_VENV -c "import torch" 2>$null
 if ($LASTEXITCODE -ne 0) {
-    info "Installation de torch (peut etre long)..."
-    & $PIP install torch --index-url https://download.pytorch.org/whl/cpu
+    info "Installation de torch (peut etre long, ~2 GB)..."
+    & $PYTHON_VENV -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 }
-$tfCheck = & $PYTHON_VENV -c "import transformers" 2>$null
+& $PYTHON_VENV -c "import transformers" 2>$null
 if ($LASTEXITCODE -ne 0) {
     info "Installation de transformers..."
-    & $PIP install transformers
+    & $PYTHON_VENV -m pip install transformers
 }
 
 ok "Dependances Python OK."
