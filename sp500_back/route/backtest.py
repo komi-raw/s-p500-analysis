@@ -11,7 +11,6 @@ Granularités supportées :
 """
 import math
 import os
-from datetime import datetime
 from collections import OrderedDict
 
 import httpx
