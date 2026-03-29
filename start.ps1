@@ -117,13 +117,11 @@ info "Mise a jour de pip..."
 info "Installation des dependances Python..."
 & $PYTHON_VENV -m pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql groq requests numpy scikit-learn
 
-& $PYTHON_VENV -c "import torch" 2>$null
-if ($LASTEXITCODE -ne 0) {
+if (-not (& $PYTHON_VENV -m pip show torch 2>$null)) {
     info "Installation de torch (peut etre long, ~2 GB)..."
     & $PYTHON_VENV -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 }
-& $PYTHON_VENV -c "import transformers" 2>$null
-if ($LASTEXITCODE -ne 0) {
+if (-not (& $PYTHON_VENV -m pip show transformers 2>$null)) {
     info "Installation de transformers..."
     & $PYTHON_VENV -m pip install transformers
 }
