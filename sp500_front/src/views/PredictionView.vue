@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getAllCompanies, type CompanyID } from "@/fetchers/Company.ftc";
 import { getAllPrices } from "@/fetchers/Company2Stat.ftc";
-import { getPrediction, type PredictionResult } from "@/fetchers/Prediction.ftc";
+import { getPrediction, type PredictionResult, type Granularity } from "@/fetchers/Prediction.ftc";
 import { ChartDefault } from "@/objects/ChartCM";
 import { CandlestickSeries, LineSeries } from "lightweight-charts";
 import { onBeforeMount, onMounted, ref } from "vue";
@@ -13,6 +13,13 @@ const companies = ref<CompanyID[]>([]);
 const predictionResult = ref<PredictionResult | null>(null);
 const errorMsg = ref("");
 const stepsInput = ref<number>(10);
+const granularity = ref<Granularity>("day");
+
+const granularityOptions: { value: Granularity; label: string; interval: number }[] = [
+    { value: "day",   label: "Jours",    interval: 86400 },
+    { value: "hour",  label: "Heures",   interval: 3600  },
+    { value: "15min", label: "15 min",   interval: 900   },
+];
 
 let chart: any = null;
 let predictionSeries: any = null;
@@ -51,7 +58,7 @@ async function runPrediction() {
     try {
         const [pricesRes, predRes] = await Promise.all([
             getAllPrices(currentCompany.value),
-            getPrediction(currentCompany.value, stepsInput.value),
+            getPrediction(currentCompany.value, stepsInput.value, granularity.value),
         ]);
 
         predictionResult.value = predRes.data;
@@ -73,10 +80,7 @@ async function runPrediction() {
 
         // Prédictions en ligne verte
         const lastTime = historical[historical.length - 1]?.time ?? 0;
-        const interval =
-            historical.length > 1
-                ? historical[historical.length - 1].time - historical[historical.length - 2].time
-                : 86400;
+        const interval = granularityOptions.find((o) => o.value === granularity.value)!.interval;
 
         const predPoints = predRes.data.predictions.map((p, i) => ({
             time: lastTime + interval * (i + 1),
@@ -126,10 +130,24 @@ async function runPrediction() {
                 </div>
             </div>
 
-            <!-- Nombre de jours -->
+            <!-- Granularité -->
+            <div class="row self-start">
+                <div class="pl-1 pb-1 pr-1 flex gap-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-2">Granularité : </span>
+                    <button
+                        v-for="opt in granularityOptions"
+                        :key="opt.value"
+                        @click="granularity = opt.value"
+                        style="border-radius: 4px; padding: 2px 10px; cursor: pointer; border: 1px solid #555; font-size: 0.85em; transition: background 0.15s;"
+                        :style="{ background: granularity === opt.value ? 'rgb(74,222,128)' : '#333', color: granularity === opt.value ? '#111' : '#DDD', fontWeight: granularity === opt.value ? '600' : '400' }"
+                    >{{ opt.label }}</button>
+                </div>
+            </div>
+
+            <!-- Nombre de steps -->
             <div class="row self-start">
                 <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
-                    <span class="mr-2">Jours à prédire : </span>
+                    <span class="mr-2">Steps à prédire : </span>
                     <input
                         v-model.number="stepsInput"
                         type="number"
