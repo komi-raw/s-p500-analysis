@@ -207,11 +207,13 @@ Ancien serveur Node.js remplacé par `sp500_back`. Conservé à titre de référ
 | **Volume** | Nombre d'actions échangées |
 
 | Tendance | Signification |
-|----------|---------------|
-| Close > Open | Journée haussière |
-| Close < Open | Journée baissière |
-| Volume élevé | Forte activité, événement majeur |
-| Volume faible | Marché calme |
+| ------------------- | ---------------------------------------------------- |
+| **Close > Open**    | L'indice a monté → journée positive.                 |
+| **Close < Open**    | L'indice a baissé → journée négative.                |
+| **High ≈ Close**    | Les acheteurs ont dominé jusqu'à la fin.             |
+| **Low ≈ Close**     | Les vendeurs ont dominé la séance.                   |
+| **Volume élevé**    | Forte activité = marché nerveux ou événement majeur. |
+| **Volume faible**   | Peu d'intérêt = marché calme, attente d'infos.       |
 
 ---
 
@@ -262,3 +264,17 @@ npm run dev
 | `DB_NAME` | `sp500` | Nom de la base |
 | `ML_API_URL` | `http://localhost:8002` | URL du service ML |
 | `CONTEXT_LENGTH` | `64` | Nombre de points historiques envoyés au modèle |
+| `GROQ_API_KEY` | _(obligatoire)_ | Clé API Groq pour le service LLM |
+
+---
+
+## Configuration du chat LLM
+
+1. Générer une clé API sur : https://console.groq.com/keys
+2. Exporter la variable d'environnement avant de lancer `sp500_ia` :
+
+```bash
+export GROQ_API_KEY="ta_clé_ici"
+cd sp500_ia
+uvicorn main:app --port 8001 --reload
+```
