@@ -15,11 +15,13 @@ const errorMsg = ref("");
 const stepsInput = ref<number>(10);
 const granularity = ref<Granularity>("day");
 
-const granularityOptions: { value: Granularity; label: string; interval: number }[] = [
-    { value: "day",   label: "Jours",    interval: 86400 },
-    { value: "hour",  label: "Heures",   interval: 3600  },
-    { value: "15min", label: "15 min",   interval: 900   },
+const granularityOptions: { value: Granularity; label: string; interval: number; stepLabel: string; dateLabel: string }[] = [
+    { value: "day",   label: "Jours",  interval: 86400, stepLabel: "Jour",      dateLabel: "Date estimée"        },
+    { value: "hour",  label: "Heures", interval: 3600,  stepLabel: "Heure",     dateLabel: "Date & heure estimée" },
+    { value: "15min", label: "15 min", interval: 900,   stepLabel: "Intervalle",dateLabel: "Date & heure estimée" },
 ];
+
+const currentGranOpt = () => granularityOptions.find((o) => o.value === granularity.value)!;
 
 let chart: any = null;
 let predictionSeries: any = null;
@@ -152,7 +154,7 @@ async function runPrediction() {
             <!-- Nombre de steps -->
             <div class="row self-start">
                 <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
-                    <span class="mr-2">Steps à prédire : </span>
+                    <span class="mr-2">{{ currentGranOpt().label }} à prédire : </span>
                     <input
                         v-model.number="stepsInput"
                         type="number"
@@ -226,9 +228,9 @@ async function runPrediction() {
                     <table style="width:100%; font-size:0.82em; border-collapse: collapse;">
                         <thead>
                             <tr style="border-bottom: 1px solid #444;">
-                                <th style="text-align:left; padding: 4px 8px;">Step</th>
+                                <th style="text-align:left; padding: 4px 8px;">{{ currentGranOpt().stepLabel }}</th>
                                 <th style="text-align:left; padding: 4px 8px;">Close estimé</th>
-                                <th style="text-align:left; padding: 4px 8px;">Date estimée</th>
+                                <th style="text-align:left; padding: 4px 8px;">{{ currentGranOpt().dateLabel }}</th>
                             </tr>
                         </thead>
                         <tbody>
