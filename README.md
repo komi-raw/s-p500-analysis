@@ -145,7 +145,7 @@ Ce script :
 1. Vérifie Python, Node.js et Docker
 2. Demande la clé Groq si `GROQ_API_KEY` n'est pas définie
 3. Crée un environnement virtuel Python dans `venv/`
-4. Installe les dépendances Python (`requirements.txt` de chaque service)
+4. Installe les dépendances Python des services backend via des commandes `pip install ...` intégrées au script
 5. Installe les dépendances npm du frontend
 6. Démarre les 4 services en arrière-plan avec logs dans `logs/`
 
