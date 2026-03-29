@@ -21,7 +21,11 @@ export type PredictionResult = {
  *
  * Fetch ML price predictions for a given ticker.
  */
-export function getPrediction(code: string, steps?: number): Promise<xFetch_Response<PredictionResult>> {
-    const url = steps ? `/api/prediction/?code=${code}&steps=${steps}` : `/api/prediction/?code=${code}`;
-    return xfetch_back<PredictionResult>(url, null);
+export type Granularity = "day" | "hour" | "15min";
+
+export function getPrediction(code: string, steps?: number, granularity?: Granularity): Promise<xFetch_Response<PredictionResult>> {
+    const params = new URLSearchParams({ code });
+    if (steps) params.set("steps", String(steps));
+    if (granularity) params.set("granularity", granularity);
+    return xfetch_back<PredictionResult>(`/api/prediction/?${params}`, null);
 }

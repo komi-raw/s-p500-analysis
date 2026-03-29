@@ -4,6 +4,7 @@ from route.prices import router as prices
 from route.companies import router as companies
 from route.globale import router as globale
 from route.prediction import router as prediction
+from route.backtest import router as backtest
 app = FastAPI(
         title="SP500 Analysis API",
         description="API for SP500 data analysis and visualization",
@@ -22,7 +23,8 @@ app.add_middleware(
 app.include_router(prices)
 app.include_router(companies)
 app.include_router(globale)
-app.include_router(prediction) 
+app.include_router(prediction)
+app.include_router(backtest)
 
 @app.get("/")
 def read_root():

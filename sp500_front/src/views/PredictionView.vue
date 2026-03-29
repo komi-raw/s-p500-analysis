@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getAllCompanies, type CompanyID } from "@/fetchers/Company.ftc";
 import { getAllPrices } from "@/fetchers/Company2Stat.ftc";
-import { getPrediction, type PredictionResult } from "@/fetchers/Prediction.ftc";
+import { getPrediction, type PredictionResult, type Granularity } from "@/fetchers/Prediction.ftc";
 import { ChartDefault } from "@/objects/ChartCM";
 import { CandlestickSeries, LineSeries } from "lightweight-charts";
 import { onBeforeMount, onMounted, ref } from "vue";
@@ -13,6 +13,15 @@ const companies = ref<CompanyID[]>([]);
 const predictionResult = ref<PredictionResult | null>(null);
 const errorMsg = ref("");
 const stepsInput = ref<number>(10);
+const granularity = ref<Granularity>("day");
+
+const granularityOptions: { value: Granularity; label: string; interval: number; stepLabel: string; dateLabel: string }[] = [
+    { value: "day",   label: "Jours",  interval: 86400, stepLabel: "Jour",      dateLabel: "Date estimée"        },
+    { value: "hour",  label: "Heures", interval: 3600,  stepLabel: "Heure",     dateLabel: "Date & heure estimée" },
+    { value: "15min", label: "15 min", interval: 900,   stepLabel: "Intervalle",dateLabel: "Date & heure estimée" },
+];
+
+const currentGranOpt = () => granularityOptions.find((o) => o.value === granularity.value)!;
 
 let chart: any = null;
 let predictionSeries: any = null;
@@ -29,7 +38,12 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
-    chart = new ChartDefault("prediction-chart", CandlestickSeries);
+    chart = new ChartDefault("prediction-chart", CandlestickSeries, {
+        autoSize: true,
+        layout: { background: { color: "#222" }, textColor: "#DDD" },
+        grid: { vertLines: { color: "#444" }, horzLines: { color: "#444" } },
+        timeScale: { timeVisible: true, secondsVisible: false },
+    });
 
     predictionSeries = chart.chart.addSeries(LineSeries);
     predictionSeries.applyOptions({ color: "rgb(74, 222, 128)", lineWidth: 2, lineStyle: 1 });
@@ -43,6 +57,30 @@ async function corpChanged(val: any) {
     predictionSeries.setData([]);
 }
 
+function exportCSV() {
+    if (!predictionResult.value) return;
+    const r = predictionResult.value;
+    const granOpt = currentGranOpt();
+    const rows = [
+        ["Ticker", r.ticker],
+        ["Mode", r.prediction_mode],
+        ["Dernier close", r.last_known_close],
+        ["Dernière date", r.last_known_date],
+        ["Granularité", granularity.value],
+        [],
+        [granOpt.stepLabel, "Close estimé ($)", granOpt.dateLabel],
+        ...r.predictions.map((p) => [p.step, p.predicted_close, p.estimated_date ?? ""]),
+    ];
+    const csv = rows.map((row) => row.join(";")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `prediction_${r.ticker}_${granularity.value}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
 async function runPrediction() {
     if (!currentCompany.value) return;
     predicting.value = true;
@@ -51,7 +89,7 @@ async function runPrediction() {
     try {
         const [pricesRes, predRes] = await Promise.all([
             getAllPrices(currentCompany.value),
-            getPrediction(currentCompany.value, stepsInput.value),
+            getPrediction(currentCompany.value, stepsInput.value, granularity.value),
         ]);
 
         predictionResult.value = predRes.data;
@@ -73,10 +111,7 @@ async function runPrediction() {
 
         // Prédictions en ligne verte
         const lastTime = historical[historical.length - 1]?.time ?? 0;
-        const interval =
-            historical.length > 1
-                ? historical[historical.length - 1].time - historical[historical.length - 2].time
-                : 86400;
+        const interval = granularityOptions.find((o) => o.value === granularity.value)!.interval;
 
         const predPoints = predRes.data.predictions.map((p, i) => ({
             time: lastTime + interval * (i + 1),
@@ -126,10 +161,24 @@ async function runPrediction() {
                 </div>
             </div>
 
-            <!-- Nombre de jours -->
+            <!-- Granularité -->
+            <div class="row self-start">
+                <div class="pl-1 pb-1 pr-1 flex gap-1" style="background-color: #202020; border-radius: 5px;">
+                    <span class="mr-2">Granularité : </span>
+                    <button
+                        v-for="opt in granularityOptions"
+                        :key="opt.value"
+                        @click="granularity = opt.value"
+                        style="border-radius: 4px; padding: 2px 10px; cursor: pointer; border: 1px solid #555; font-size: 0.85em; transition: background 0.15s;"
+                        :style="{ background: granularity === opt.value ? 'rgb(74,222,128)' : '#333', color: granularity === opt.value ? '#111' : '#DDD', fontWeight: granularity === opt.value ? '600' : '400' }"
+                    >{{ opt.label }}</button>
+                </div>
+            </div>
+
+            <!-- Nombre de steps -->
             <div class="row self-start">
                 <div class="pl-1 pb-1 pr-1" style="background-color: #202020; border-radius: 5px;">
-                    <span class="mr-2">Jours à prédire : </span>
+                    <span class="mr-2">{{ currentGranOpt().label }} à prédire : </span>
                     <input
                         v-model.number="stepsInput"
                         type="number"
@@ -198,14 +247,24 @@ async function runPrediction() {
                     </div>
                 </div>
 
+                <!-- Export -->
+                <div class="row self-start mt-2">
+                    <button
+                        @click="exportCSV"
+                        style="background-color: #1a3a2a; border: 1px solid rgb(74,222,128); border-radius: 5px; padding: 4px 12px; cursor: pointer; font-size: 0.82em; color: rgb(74,222,128);"
+                    >
+                        ↓ Exporter CSV
+                    </button>
+                </div>
+
                 <!-- Tableau des prédictions -->
                 <div class="row self-start w-full mt-2">
                     <table style="width:100%; font-size:0.82em; border-collapse: collapse;">
                         <thead>
                             <tr style="border-bottom: 1px solid #444;">
-                                <th style="text-align:left; padding: 4px 8px;">Step</th>
+                                <th style="text-align:left; padding: 4px 8px;">{{ currentGranOpt().stepLabel }}</th>
                                 <th style="text-align:left; padding: 4px 8px;">Close estimé</th>
-                                <th style="text-align:left; padding: 4px 8px;">Date estimée</th>
+                                <th style="text-align:left; padding: 4px 8px;">{{ currentGranOpt().dateLabel }}</th>
                             </tr>
                         </thead>
                         <tbody>

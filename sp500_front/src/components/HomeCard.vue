@@ -8,9 +8,6 @@ const goToDataView = () => router.push(props.path);
 </script>
 
 <template>
-    <div v-if="!isActive" class="p-8 card restricted cursor-not-allowed">
-        <h3 class="text-xl">Unavailable yet.</h3>
-    </div>
     <div @click="goToDataView" v-if="isActive" class="card cursor-pointer">
         <div class="h-full card-content flex flex-col justify-between">
             <h3 class="text-xl">{{ title }}</h3>

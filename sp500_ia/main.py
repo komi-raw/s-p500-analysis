@@ -119,11 +119,13 @@ async def analyst(req: Request):
         companies_data = {}
         for company in companies:
             try:
-                res = requests.get(f"http://localhost:8080/api/price/list?code={company}")
+                res = requests.get(f"http://localhost:8000/api/price/list?code={company}", timeout=10)
+                res.raise_for_status()
                 data = res.json()
-                companies_data[company] = data[-20:] if len(data) > 20 else data
-            except:
-                pass
+                # Les données sont triées du plus récent au plus ancien → prendre les 50 premiers
+                companies_data[company] = data[:50] if len(data) > 50 else data
+            except Exception as e:
+                companies_data[company] = {"error": str(e)}
 
         system_prompt = """Tu es un expert en analyse financière et boursière du S&P500.
 Tu réponds en français de manière précise et structurée.
@@ -131,7 +133,7 @@ Tu sais :
 - Analyser les tendances haussières/baissières
 - Comparer plusieurs entreprises entre elles (prix, volume, volatilité)
 - Détecter les anomalies : pics de volume inhabituels, variations de prix extrêmes, journées atypiques
-- Calculer des indicateurs : moyenne mobile, volatilité, variation en pourcentage
+- Calculer des indicateurs : moyenne, volatilité, variation en pourcentage
 - Identifier les meilleures et pires performances sur une période
 Quand tu compares plusieurs entreprises, structure ta réponse avec des sections claires par entreprise.
 Quand tu détectes des anomalies, explique pourquoi c'est anormal par rapport aux données habituelles."""

@@ -29,10 +29,18 @@ def _validate_ticker(db: Session, code: str) -> str:
     return code
 
 
+GRANULARITY_DELTA = {
+    "day":   lambda i: timedelta(days=i),
+    "hour":  lambda i: timedelta(hours=i),
+    "15min": lambda i: timedelta(minutes=15 * i),
+}
+
+
 @router.get("/")
 def get_prediction(
     code: str = Query(..., description="Code boursier (ex: ABT, TSLA, MSFT)"),
     steps: int = Query(None, ge=1, le=200, description="Nombre de pas à prédire"),
+    granularity: str = Query("day", description="Granularité : day | hour | 15min"),
     db: Session = Depends(get_db),
 ):
     ticker = _validate_ticker(db, code)
@@ -77,11 +85,28 @@ def get_prediction(
     except Exception:
         last_dt = None
 
+    delta_fn = GRANULARITY_DELTA.get(granularity, GRANULARITY_DELTA["day"])
+    fmt = "%d/%m/%Y" if granularity == "day" else "%d/%m/%Y %H:%M"
+
+    def next_business_days(start: datetime, n: int) -> datetime:
+        """Retourne la date après n jours ouvrés (lundi-vendredi) depuis start."""
+        dt = start
+        count = 0
+        while count < n:
+            dt += timedelta(days=1)
+            if dt.weekday() < 5:  # 0=lundi … 4=vendredi
+                count += 1
+        return dt
+
     steps = []
     for i, val in enumerate(ml["predictions"], start=1):
         step = {"step": i, "predicted_close": round(val, 4)}
         if last_dt:
-            step["estimated_date"] = (last_dt + timedelta(days=i)).strftime("%d/%m/%Y")
+            if granularity == "day":
+                estimated = next_business_days(last_dt, i)
+            else:
+                estimated = last_dt + delta_fn(i)
+            step["estimated_date"] = estimated.strftime(fmt)
         steps.append(step)
 
     return {

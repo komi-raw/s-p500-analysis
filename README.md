@@ -1,40 +1,40 @@
 # S&P 500 Analysis Platform
 
-Plateforme complète d'analyse des actions du S&P 500 combinant visualisation de données historiques, prédictions par intelligence artificielle (PatchTST) et analyse financière via LLM (Grok-3).
+Plateforme d'analyse financière complète pour les actions du S&P 500, combinant :
 
----
-
-## But du projet
-
-Permettre l'analyse approfondie des actions du S&P 500 :
-
-- Consultation des **données historiques** OHLCV pour chaque action
-- **Prédictions de prix** futures via un modèle deep learning (PatchTST)
-- **Analyse financière** en langage naturel via Grok-3 (xAI)
-- **Interface web** interactive avec graphiques financiers en bougies japonaises
+- **Visualisation** interactive des données historiques OHLCV (bougies japonaises)
+- **Prédictions par deep learning** avec le modèle PatchTST (intraday et quotidien)
+- **Analyse en langage naturel** via LLM Groq (llama-3.3-70b-versatile)
+- **Exploration sectorielle** GICS avec prédictions ML croisées et synthèse IA
+- **Backtesting** — comparaison prédictions ML vs données réelles sur 13 tickers
 
 ---
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────┐
-│               sp500_front  (Vue 3 · port 5173)       │
-└────────┬─────────────────┬────────────────┬──────────┘
-         │                 │                │
-         ▼                 ▼                ▼
-┌─────────────────┐ ┌────────────┐ ┌──────────────────┐
-│   sp500_back    │ │  sp500_ml  │ │    sp500_ia       │
-│  API principale │ │  API ML    │ │  API LLM          │
-│   port 8000     │ │  port 8002 │ │  port 8001        │
-└────────┬────────┘ └─────┬──────┘ └────────┬──────────┘
-         │                │                  │
-         ▼                ▼                  ▼
-┌─────────────────┐ ┌────────────┐  ┌──────────────────┐
-│   MySQL (ORM)   │ │  PatchTST  │  │   Grok-3 (xAI)   │
-│   port 3306     │ │  (modèle)  │  │      API         │
-└─────────────────┘ └────────────┘  └──────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│               sp500_front  (Vue 3 + TypeScript · port 5173)      │
+│   HomeView · Viewer · AIAnalyst · PredictionView · SectorExplorer│
+└─────────┬──────────────────┬────────────────────┬───────────────┘
+          │                  │                    │
+          ▼                  ▼                    ▼
+┌──────────────────┐  ┌────────────────┐  ┌──────────────────────┐
+│   sp500_back     │  │   sp500_ml     │  │      sp500_ia        │
+│  API principale  │  │   API ML       │  │    API LLM (Groq)    │
+│   port 8000      │  │   port 8002    │  │    port 8001         │
+└────────┬─────────┘  └──────┬─────────┘  └──────────┬───────────┘
+         │                   │                        │
+         ▼                   ▼                        ▼
+┌──────────────────┐  ┌────────────────┐  ┌──────────────────────┐
+│  MySQL · 3306    │  │   PatchTST     │  │  Groq Cloud API      │
+│  (Docker)        │  │  (LSTM-free    │  │  llama-3.3-70b       │
+│  ~500 tickers    │  │  transformer)  │  │  -versatile          │
+└──────────────────┘  └────────────────┘  └──────────────────────┘
 ```
+
+> `sp500_back` orchestre les appels vers `sp500_ml` et renvoie les prédictions au frontend.
+> `sp500_ia` est appelé directement depuis le frontend (analyses LLM).
 
 ---
 
@@ -42,213 +42,239 @@ Permettre l'analyse approfondie des actions du S&P 500 :
 
 | Service | Port | Rôle |
 |---------|------|------|
-| `sp500_front` | 5173 | Interface web Vue 3 |
-| `sp500_back` | 8000 | API REST principale (données + orchestration) |
-| `sp500_ia` | 8001 | Chatbot financier LLM (Grok-3) |
-| `sp500_ml` | 8002 | Prédictions de prix (PatchTST) |
-| MySQL | 3306 | Base de données |
+| `sp500_front` | 5173 | Interface web Vue 3 + TypeScript + Tailwind CSS |
+| `sp500_back` | 8000 | API REST principale (données OHLCV, prédiction, backtest) |
+| `sp500_ia` | 8001 | Analyse financière LLM — Groq / llama-3.3-70b |
+| `sp500_ml` | 8002 | Prédictions de prix — modèle PatchTST |
+| MySQL | 3306 | Base de données (Docker) |
 
 ---
 
-## Structure des dossiers
+## Vues disponibles
 
-### `database/` — Couche d'accès aux données
+### Data Viewer `/data/view`
 
-Modèles SQLAlchemy et DAO pour interagir avec MySQL.
+Graphique en bougies japonaises temps réel (via `lightweight-charts`) pour chaque action du S&P 500.
+Sélection du ticker et de la période. Chat IA intégré pour interroger les données OHLCV affichées en langage naturel.
 
-| Fichier | Rôle |
-|---------|------|
-| `models.py` | Modèle `CompanyData` + factory dynamique de tables de prix par ticker |
-| `session.py` | Connexion MySQL via SQLAlchemy, configuration par variables d'environnement |
-| `company_dao.py` | CRUD entreprises : liste, recherche, pagination |
-| `price_dao.py` | Accès aux prix : historique, statistiques, plages de dates |
+**Fonctionnalités :** zoom, défilement, tooltips OHLCV, analyse IA sur données actuelles.
 
-**Schéma :**
-```sql
-company_data  (companyIdx PK, code CHAR(10), name VARCHAR(100))
-AAPL          (companyId, date, open, low, high, close, volume)  -- une table par ticker
+---
+
+### AI Analyst `/ai/analyst`
+
+Analyse comparative multi-entreprises par intelligence artificielle.
+
+**Deux modes :**
+
+| Mode | Description |
+|------|-------------|
+| **Chat** | Questions libres : comparaisons, tendances, anomalies, corrélations sectorielles |
+| **SQL** | L'IA génère une requête SQL à partir d'une question en langage naturel, l'exécute et interprète le résultat |
+
+**Fonctionnalités :** sélection par checkboxes avec recherche, export `.txt` de la conversation complète.
+
+---
+
+### ML Prediction `/ml/prediction`
+
+Prédictions de prix futurs via le modèle PatchTST.
+
+| Paramètre | Valeurs | Description |
+|-----------|---------|-------------|
+| Ticker | ex: AAPL, MSFT | Action S&P 500 |
+| Granularité | `day`, `hour`, `15min` | Pas de temps des prédictions |
+| Steps | 1 – 200 | Nombre de points à prédire |
+
+Affiche un graphique combinant historique réel (noir) et courbe de prédiction (orange), ainsi qu'un tableau des valeurs estimées avec dates.
+
+**Fonctionnalités :** export `.csv` des prédictions (ticker, close estimé, date).
+
+---
+
+### Sector Explorer `/sector/explorer`
+
+Vue sectorielle GICS — prédictions ML en parallèle + synthèse IA croisée.
+
+1. Sélection d'un secteur GICS (11 secteurs disponibles)
+2. Cocher les entreprises à analyser
+3. Le frontend lance toutes les prédictions ML simultanément (`Promise.allSettled`)
+4. Le résumé ML est soumis au LLM pour une interprétation sectorielle globale
+
+**Affichage :** sparklines SVG par ticker (couleur verte/rouge selon la tendance), tableau récapitulatif avec variation % et prédictions.
+
+**Fonctionnalités :** export double — `.csv` (données ML) + `.txt` (analyse IA).
+
+---
+
+## Installation et démarrage
+
+### Prérequis
+
+- Python 3.8+
+- Node.js 18+ et npm
+- Docker Desktop (ou Docker Engine)
+- Clé API Groq ([console.groq.com/keys](https://console.groq.com/keys))
+
+---
+
+### Étape 1 — Préparer la base de données *(une seule fois)*
+
+```bash
+./setup.sh          # Linux / macOS / WSL
+.\setup.ps1         # Windows (PowerShell)
+```
+
+Ce script :
+1. Construit l'image Docker MySQL 8.0 personnalisée
+2. Crée et démarre le conteneur `my_sp500_db` sur le port `3306`
+3. Attend que MySQL soit prêt à accepter les connexions
+
+> **Si le conteneur existe déjà**, le script propose de le recréer (réponse `o/n`).
+
+---
+
+### Étape 2 — Lancer la plateforme
+
+```bash
+./start.sh          # Linux / macOS / WSL
+.\start.ps1         # Windows (PowerShell)
+```
+
+Ce script :
+1. Vérifie Python, Node.js et Docker
+2. Demande la clé Groq si `GROQ_API_KEY` n'est pas définie
+3. Crée un environnement virtuel Python dans `venv/`
+4. Installe les dépendances Python des services backend via des commandes `pip install ...` intégrées au script
+5. Installe les dépendances npm du frontend
+6. Démarre les 4 services en arrière-plan avec logs dans `logs/`
+
+Accès : **http://localhost:5173**
+
+---
+
+### Étape 3 — Arrêter les services
+
+```bash
+./stop.sh           # Linux / macOS / WSL
+.\stop.ps1          # Windows (PowerShell)
 ```
 
 ---
 
-### `sp500_back/` — API principale (FastAPI · port 8000)
+### Clé API Groq
 
-Point d'entrée REST central. Expose les données et orchestre les appels ML.
+```bash
+# Option A — variable d'environnement (recommandé)
+export GROQ_API_KEY="gsk_xxxxxxxxxxxx"
+./start.sh
 
-| Fichier | Rôle |
-|---------|------|
-| `main.py` | App FastAPI, CORS, enregistrement des routers |
-| `route/companies.py` | `/api/company/` — liste, info, recherche, comptage |
-| `route/prices.py` | `/api/price/` — historique, dernier prix, statistiques |
-| `route/prediction.py` | `/api/prediction/` — récupère les prix, agrège par jour, appelle sp500_ml |
-| `route/globale.py` | `/db/query` — exécution SQL brute (debug) |
-
-**Endpoints :**
-```
-GET /api/company/list
-GET /api/company/info?code=AAPL
-GET /api/company/search?query=Air
-GET /api/company/count
-
-GET /api/price/list?code=AAPL&start_date=2025-01-01&end_date=2025-06-01
-GET /api/price/latest?code=AAPL
-GET /api/price/statistics?code=AAPL
-GET /api/price/count?code=AAPL
-
-GET /api/prediction/?code=AAPL&steps=20
-GET /api/prediction/health
-
-POST /db/query   body: { "query": "SELECT ..." }
+# Option B — saisie interactive
+./start.sh
+# → Le script vous demandera la clé si GROQ_API_KEY n'est pas définie
 ```
 
 ---
 
-### `sp500_ml/` — Service ML (FastAPI · port 8002)
+## Endpoints API
 
-Prédictions de prix via le modèle **PatchTST** (HuggingFace Transformers).
+### `sp500_back` · port 8000
 
-| Fichier | Rôle |
-|---------|------|
-| `main.py` | App FastAPI, chargement du modèle au démarrage |
-| `route/predict.py` | `POST /predict/` — inférence avec support cascade multi-steps |
-| `ml/predictor.py` | Singleton du modèle, normalisation, inférence |
-| `ml/patchtst_saved/` | Modèle pré-entraîné + scalers par ticker |
+#### Entreprises
 
-**Fonctionnement :**
-- Entrée : 64 derniers prix de clôture d'un ticker
-- Sortie : N prédictions (configurable via `steps`)
-- Si `steps > prediction_length` du modèle : **prédictions en cascade** (réinjection des sorties comme nouveau contexte)
-- Mode `dedicated_scaler` (ticker connu, plus précis) ou `fallback` (normalisation à la volée)
+```
+GET  /api/company/list                       → Liste toutes les entreprises
+GET  /api/company/info?code=AAPL             → Détails d'une entreprise
+GET  /api/company/search?query=Microsoft     → Recherche par nom ou ticker
+GET  /api/company/count                      → Nombre total d'entreprises
+```
+
+#### Prix OHLCV
+
+```
+GET  /api/price/list?code=AAPL&start_date=2025-01-01&end_date=2025-06-01
+GET  /api/price/latest?code=AAPL             → Dernier prix enregistré
+GET  /api/price/statistics?code=AAPL         → Min, max, moyenne, volume total
+GET  /api/price/count?code=AAPL              → Nombre de points disponibles
+```
+
+#### Prédictions ML (orchestrées)
+
+```
+GET  /api/prediction/?code=AAPL&steps=20&granularity=day
+     → { ticker, predictions: [...], last_known_close, last_known_date, prediction_mode }
+
+GET  /api/prediction/health                  → Vérifie que sp500_ml est accessible
+```
+
+#### Backtest
+
+```
+GET  /api/backtest/?code=MSFT&steps=10&granularity=day
+     → Simule une prédiction faite N steps avant la fin des données
+     → Compare les valeurs prédites aux vraies valeurs
+     → Retourne MAE, RMSE, MAPE + détail step par step
+
+Paramètres :
+  code        Ticker S&P 500 (obligatoire)
+  steps       1–500 — nombre de steps à tester (défaut : 10)
+  granularity day | 15min | 30min (défaut : day)
+```
+
+Réponse backtest :
+```json
+{
+  "ticker": "MSFT",
+  "granularity": "day",
+  "prediction_mode": "fallback",
+  "context_length": 64,
+  "test_steps": 10,
+  "context_end_date": "2026-03-10",
+  "context_end_close": 388.12,
+  "metrics": { "mae": 1.24, "rmse": 1.87, "mape": 0.33 },
+  "steps": [
+    { "step": 1, "date": "2026-03-11", "predicted": 389.4, "actual": 387.8,
+      "error": 1.6, "abs_error": 1.6, "pct_error": 0.41 },
+    ...
+  ]
+}
+```
+
+#### Base de données (SQL brut)
+
+```
+POST /db/query   { "query": "SELECT code, name FROM company_data LIMIT 10" }
+```
+
+---
+
+### `sp500_ml` · port 8002
 
 ```
 POST /predict/
-{ "ticker": "APD", "close_values": [...64 valeurs...], "steps": 30 }
-→ { "predictions": [...], "mode": "fallback", "prediction_length": 30 }
+     Corps : { "ticker": "AAPL", "close_values": [<64 floats>], "steps": 30 }
+     → { "predictions": [<N floats>], "mode": "dedicated_scaler|fallback",
+         "prediction_length": 30 }
 
-GET /health
+GET  /health     → { "status": "ok", "model_loaded": true }
 ```
 
 ---
 
-### `sp500_ia/` — Service LLM (FastAPI · port 8001)
-
-Analyse financière en langage naturel via l'API **Grok-3-Mini** (xAI).
-
-| Fichier | Rôle |
-|---------|------|
-| `main.py` | App FastAPI + tous les endpoints LLM |
-
-**Endpoints :**
-```
-POST /ask/companyinfo/data   → Analyse les données OHLCV d'une action
-POST /ask/ia/sqlproxy        → Génère et exécute une requête SQL depuis une question naturelle
-POST /ask/ia/analyst         → Analyse comparative multi-entreprises avec détection d'anomalies
-```
-
-**Configuration clé API :**
-1. Obtenir une clé sur https://console.x.ai/
-2. La renseigner dans `sp500_ia/main.py`
-
----
-
-### `sp500_front/` — Interface web (Vue 3 · port 5173)
+### `sp500_ia` · port 8001
 
 ```
-src/
-├── views/
-│   ├── HomeView.vue        → Accueil avec cartes de navigation
-│   ├── Viewer.vue          → Graphique en bougies + infos entreprise + chat IA
-│   ├── AIAnalyst.vue       → Chatbot financier (analyst / SQL naturel)
-│   └── PredictionView.vue  → Prédictions ML avec graphique historique + ligne prédite
-├── fetchers/
-│   ├── GenericFetcher.ts   → Client HTTP Axios de base
-│   ├── Company.ftc.ts      → Appels /api/company/
-│   ├── Company2Stat.ftc.ts → Appels /api/price/
-│   └── Prediction.ftc.ts   → Appels /api/prediction/
-├── config/
-│   ├── public-env.ts       → URLs (BACK_PORT=8000, BACK_IA_PORT=8001, BACK_ML_PORT=8002)
-│   └── public-dat.ts       → Constantes
-├── components/
-│   ├── Nav.vue / Footer.vue / HomeCard.vue / TextBox.vue
-└── objects/
-    └── ChartCM.ts          → Wrapper lightweight-charts (bougies japonaises)
-```
+POST /ask/companyinfo/data
+     Corps : { "ticker": "AAPL", "ohlcv_data": [...], "question": "..." }
+     → Analyse IA des données OHLCV d'une action (mode Viewer)
 
----
+POST /ask/ia/sqlproxy
+     Corps : { "question": "Quel est le ticker avec le plus de volume ?" }
+     → Génère une requête SQL, l'exécute et renvoie l'interprétation
 
-### `back/` — Backend Express.js (legacy)
-
-Ancien serveur Node.js remplacé par `sp500_back`. Conservé à titre de référence.
-
----
-
-### Fichiers à la racine
-
-| Fichier | Rôle |
-|---------|------|
-| `Dockerfile` | Image MySQL 8.0 préconfigurée |
-| `dockerBuild.sh` | Build de l'image Docker |
-| `dockerRun.sh` | Lance le conteneur MySQL |
-| `dockerAddData.sh` | Charge les fichiers SQL dans la base |
-| `convertCsvToSql.py` | Convertit les CSV de prix en fichiers SQL |
-| `export_data_info.py` | Utilitaire d'export |
-| `extract_names_company.py` | Extraction des noms d'entreprises |
-
----
-
-## Lecture des données OHLCV
-
-| Colonne | Signification |
-|---------|---------------|
-| **Open** | Prix d'ouverture |
-| **High** | Prix le plus haut |
-| **Low** | Prix le plus bas |
-| **Close** | Prix de clôture |
-| **Volume** | Nombre d'actions échangées |
-
-| Tendance | Signification |
-| ------------------- | ---------------------------------------------------- |
-| **Close > Open**    | L'indice a monté → journée positive.                 |
-| **Close < Open**    | L'indice a baissé → journée négative.                |
-| **High ≈ Close**    | Les acheteurs ont dominé jusqu'à la fin.             |
-| **Low ≈ Close**     | Les vendeurs ont dominé la séance.                   |
-| **Volume élevé**    | Forte activité = marché nerveux ou événement majeur. |
-| **Volume faible**   | Peu d'intérêt = marché calme, attente d'infos.       |
-
----
-
-## Lancer le projet
-
-### 1. Base de données MySQL
-```bash
-./dockerBuild.sh
-./dockerRun.sh
-./dockerAddData.sh
-```
-
-### 2. API principale
-```bash
-cd sp500_back
-uvicorn main:app --port 8000 --reload
-```
-
-### 3. Service LLM
-```bash
-cd sp500_ia
-uvicorn main:app --port 8001 --reload
-```
-
-### 4. Service ML
-```bash
-cd sp500_ml
-uvicorn main:app --port 8002 --reload
-```
-
-### 5. Frontend
-```bash
-cd sp500_front
-npm install
-npm run dev
+POST /ask/ia/analyst
+     Corps : { "companies": ["AAPL","MSFT"], "ohlcv_summaries": {...}, "question": "..." }
+     → Analyse comparative multi-entreprises (mode AI Analyst)
 ```
 
 ---
@@ -257,24 +283,197 @@ npm run dev
 
 | Variable | Défaut | Description |
 |----------|--------|-------------|
+| `GROQ_API_KEY` | _(obligatoire)_ | Clé API Groq pour le service LLM |
 | `DB_USER` | `sp500_main` | Utilisateur MySQL |
 | `DB_PASSWORD` | `sp500_main` | Mot de passe MySQL |
 | `DB_HOST` | `localhost` | Hôte MySQL |
 | `DB_PORT` | `3306` | Port MySQL |
-| `DB_NAME` | `sp500` | Nom de la base |
-| `ML_API_URL` | `http://localhost:8002` | URL du service ML |
-| `CONTEXT_LENGTH` | `64` | Nombre de points historiques envoyés au modèle |
-| `GROQ_API_KEY` | _(obligatoire)_ | Clé API Groq pour le service LLM |
+| `DB_NAME` | `sp500` | Nom de la base de données |
+| `ML_API_URL` | `http://localhost:8002` | URL interne du service ML |
+| `CONTEXT_LENGTH` | `64` | Points historiques envoyés au modèle PatchTST |
 
 ---
 
-## Configuration du chat LLM
+## Structure du projet
 
-1. Générer une clé API sur : https://console.groq.com/keys
-2. Exporter la variable d'environnement avant de lancer `sp500_ia` :
+```
+s-p500-analysis/
+├── setup.sh / setup.ps1            # Création Docker + chargement SQL (première fois)
+├── start.sh / start.ps1            # Lancement de tous les services
+├── stop.sh  / stop.ps1             # Arrêt de tous les services
+├── Dockerfile                      # Image MySQL 8.0 préconfigurée
+├── generate_pdf.py                 # Génère README.pdf via weasyprint + markdown2
+│
+├── sp500_back/                     # API principale (FastAPI · port 8000)
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── route/
+│   │   ├── companies.py            # /api/company/
+│   │   ├── prices.py               # /api/price/
+│   │   ├── prediction.py           # /api/prediction/ — orchestre l'appel ML
+│   │   ├── backtest.py             # /api/backtest/ — simulation rétrospective
+│   │   └── globale.py              # /db/query — SQL brut
+│   └── database/
+│       ├── models.py               # Modèles SQLAlchemy
+│       ├── session.py              # Connexion MySQL
+│       ├── company_dao.py          # CRUD entreprises
+│       └── price_dao.py            # Accès aux prix OHLCV
+│
+├── sp500_ml/                       # Service ML (FastAPI · port 8002)
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── route/predict.py            # POST /predict/
+│   └── ml/
+│       ├── predictor.py            # Singleton PatchTST, normalisation, inférence
+│       └── patchtst_saved/         # Modèle pré-entraîné + scalers dédiés par ticker
+│
+├── sp500_ia/                       # Service LLM (FastAPI · port 8001)
+│   ├── main.py                     # Endpoints Groq (companyinfo, sqlproxy, analyst)
+│   └── requirements.txt
+│
+├── sp500_front/                    # Frontend (Vue 3 + TypeScript + Tailwind · port 5173)
+│   └── src/
+│       ├── views/
+│       │   ├── HomeView.vue        # Page d'accueil — cartes de navigation
+│       │   ├── Viewer.vue          # Bougies japonaises + chat IA
+│       │   ├── AIAnalyst.vue       # Chatbot multi-entreprises + SQL naturel
+│       │   ├── PredictionView.vue  # ML Prediction avec granularité + export CSV
+│       │   └── SectorExplorer.vue  # ML + IA par secteur GICS + export CSV/TXT
+│       ├── fetchers/               # Clients HTTP typés vers les APIs
+│       ├── config/
+│       │   ├── public-env.ts       # Ports et URLs des services
+│       │   └── sectors.ts          # 11 secteurs GICS avec leurs tickers S&P 500
+│       └── components/             # Nav, Footer, HomeCard, TextBox
+│
+├── tests/
+│   ├── run_backtests.py            # Script : 13 tickers × 7 horizons × 3 granularités
+│   ├── backtest_summary.csv        # Résumé des métriques (MAE, RMSE, MAPE)
+│   ├── backtest_day_*.csv          # Détail par step — granularité jour
+│   ├── backtest_15min_*.csv        # Détail par step — granularité 15 min
+│   ├── backtest_30min_*.csv        # Détail par step — granularité 30 min
+│   └── COVERAGE.md                 # Rapport complet de couverture des tests
+│
+└── SQL_Output/                     # Fichiers SQL à charger dans MySQL
+    └── SQL_Output_compiled/
+        └── SQL_Output/             # ~500 fichiers .sql (un par ticker)
+```
+
+---
+
+## Schéma de la base de données
+
+```sql
+-- Répertoire des entreprises
+CREATE TABLE company_data (
+    companyIdx  INT          PRIMARY KEY,
+    code        CHAR(10)     NOT NULL,   -- ticker boursier (ex: AAPL)
+    name        VARCHAR(100) NOT NULL    -- nom complet
+);
+
+-- Données de prix — une table par ticker (ex: AAPL, MSFT, NVDA...)
+CREATE TABLE AAPL (
+    companyId   INT,
+    date        DATETIME,               -- horodatage intraday (15 min)
+    open        DECIMAL(10,4),
+    low         DECIMAL(10,4),
+    high        DECIMAL(10,4),
+    close       DECIMAL(10,4),
+    volume      BIGINT
+);
+```
+
+> Les tables de prix contiennent des données **intraday à 15 minutes** sur environ 2 mois.
+> Pour le mode `day`, les données sont agrégées par journée (dernier close retenu).
+
+---
+
+## Lecture des données OHLCV
+
+| Colonne | Signification |
+|---------|---------------|
+| **Open** | Prix d'ouverture de la période |
+| **High** | Prix le plus haut atteint |
+| **Low** | Prix le plus bas atteint |
+| **Close** | Prix de clôture de la période |
+| **Volume** | Nombre d'actions échangées |
+
+### Interprétation des bougies japonaises
+
+| Signal | Interprétation |
+|--------|----------------|
+| Close > Open | Bougie haussière (verte) |
+| Close < Open | Bougie baissière (rouge) |
+| High ≈ Close | Les acheteurs ont dominé jusqu'à la clôture |
+| Low ≈ Close | Les vendeurs ont dominé la séance |
+| Volume élevé | Fort intérêt — événement ou volatilité importante |
+| Volume faible | Marché calme, peu d'activité ou heure creuse |
+
+---
+
+## Modèle ML — PatchTST
+
+PatchTST (**Patch Time Series Transformer**) est un modèle transformer sans cellule récurrente (LSTM-free), spécialisé dans la prédiction de séries temporelles univariées.
+
+### Fonctionnement
+
+1. **Entrée** : 64 derniers prix de clôture d'un ticker
+2. **Patching** : la séquence est découpée en patches chevauchants, traités comme des tokens
+3. **Transformer** : les tokens sont encodés et les dépendances temporelles sont apprises via l'auto-attention
+4. **Sortie** : N prédictions consécutives (configurable via `steps`)
+
+### Modes d'inférence
+
+| Mode | Condition | Description |
+|------|-----------|-------------|
+| `dedicated_scaler` | Ticker connu du modèle | Scaler pré-entraîné sur les données du ticker — normalisation optimale |
+| `fallback` | Ticker sans scaler dédié | Normalisation calculée à la volée sur les 64 valeurs reçues |
+
+### Prédiction en cascade
+
+Si `steps` dépasse la longueur de prédiction native du modèle, les sorties du premier batch sont réinjectées comme nouveau contexte pour générer les étapes suivantes. La précision peut décliner légèrement sur les horizons lointains.
+
+---
+
+## Backtesting
+
+Le backtest simule une prédiction faite dans le passé et compare le résultat aux vraies valeurs.
+
+```
+Données réelles : [───── contexte (64 pts) ─────][── test (N pts) ──]
+                                                  ↑
+                                   prédiction lancée depuis ici
+```
+
+### Métriques retournées
+
+| Métrique | Formule | Interprétation |
+|----------|---------|----------------|
+| **MAE** | moyenne de \|prédit − réel\| | Erreur moyenne en dollars |
+| **RMSE** | √(moyenne de (prédit−réel)²) | Penalise les grandes erreurs |
+| **MAPE** | moyenne de \|prédit−réel\| / réel × 100 | Erreur en % — comparable entre tickers |
+
+### Lancer les tests de couverture
 
 ```bash
-export GROQ_API_KEY="ta_clé_ici"
-cd sp500_ia
-uvicorn main:app --port 8001 --reload
+# Depuis la racine du projet (avec start.sh actif)
+python tests/run_backtests.py
 ```
+
+Génère `tests/backtest_summary.csv` et les fichiers détaillés par granularité.
+
+Voir le rapport complet : [tests/COVERAGE.md](tests/COVERAGE.md)
+
+---
+
+## Résultats des backtests (synthèse)
+
+273 tests effectués : **13 tickers × 7 horizons (10→70 steps) × 3 granularités**
+
+| Granularité | MAPE moyen | Meilleur ticker | Pire ticker |
+|-------------|-----------|-----------------|-------------|
+| `day` | ~0.3 – 0.8% | V, MA, JPM | TSLA, NVDA |
+| `15min` | ~0.05 – 0.2% | PEP, JNJ | TSLA |
+| `30min` | ~0.05 – 0.2% | PEP, JNJ | TSLA |
+
+> Les granularités intraday (15min, 30min) obtiennent de meilleures MAPE car les variations
+> entre deux pas de 15 minutes sont naturellement plus faibles qu'entre deux jours.
