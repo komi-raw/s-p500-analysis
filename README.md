@@ -477,3 +477,11 @@ Voir le rapport complet : [tests/COVERAGE.md](tests/COVERAGE.md)
 
 > Les granularités intraday (15min, 30min) obtiennent de meilleures MAPE car les variations
 > entre deux pas de 15 minutes sont naturellement plus faibles qu'entre deux jours.
+
+
+# Author : 
+[Felix PEREIRA](Student)
+[Jonny MATHANARUBAN](Student)
+[Matthias BOUQET](Student)
+[Shyama RUNGEN](Student)
+[Redwane RAMDANI](Student)
