@@ -3,6 +3,7 @@ from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from groq import Groq
 import requests
+import os
 
 app = FastAPI()
 
@@ -15,7 +16,7 @@ app.add_middleware(
 )
 
 LOCAL_DB_URL = "http://localhost:8000/db/query"
-client = Groq(api_key="SET_GROQ_API_KEY")
+client = Groq(api_key=os.getenv("GROQ_API_KEY", ""))
 
 @app.post("/ask/companyinfo/data")
 async def chat(req: Request):
