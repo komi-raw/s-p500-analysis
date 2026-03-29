@@ -34,12 +34,32 @@ fi
 # ---- Prérequis -------------------------------------------------------
 info "Vérification des prérequis..."
 
-command -v python3 &>/dev/null || fail "Python 3 introuvable."
-command -v node    &>/dev/null || fail "Node.js introuvable."
-command -v npm     &>/dev/null || fail "npm introuvable."
-command -v docker  &>/dev/null || fail "Docker introuvable."
+# Python — vérifie que ce n'est pas le stub Windows Store (qui ne fait rien sous WSL)
+check_python() {
+    # Le stub Windows Store existe en tant que commande mais retourne une erreur à l'exécution
+    if ! command -v python3 &>/dev/null; then
+        return 1
+    fi
+    # Tester une exécution réelle
+    if ! python3 -c "import sys; assert sys.version_info >= (3, 8)" 2>/dev/null; then
+        return 1
+    fi
+    return 0
+}
+
+if ! check_python; then
+    warn "Python 3 absent ou non fonctionnel — installation via apt..."
+    sudo apt-get update -qq
+    sudo apt-get install -y python3 python3-pip python3-venv
+    check_python || fail "Impossible d'installer Python 3. Installez-le manuellement : sudo apt install python3 python3-venv"
+fi
 
 ok "Python  $(python3 --version)"
+
+command -v node    &>/dev/null || fail "Node.js introuvable. Installez-le : https://nodejs.org"
+command -v npm     &>/dev/null || fail "npm introuvable."
+command -v docker  &>/dev/null || fail "Docker introuvable. Installez Docker Desktop : https://www.docker.com/products/docker-desktop"
+
 ok "Node.js $(node --version)"
 ok "npm     $(npm --version)"
 ok "Docker  $(docker --version | awk '{print $3}')"
