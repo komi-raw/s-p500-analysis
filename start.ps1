@@ -129,7 +129,7 @@ info "Mise a jour de pip..."
 & $PYTHON_VENV -m pip install --quiet --upgrade pip
 
 info "Installation des dependances Python..."
-& $PYTHON_VENV -m pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql groq requests numpy scikit-learn
+& $PYTHON_VENV -m pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql cryptography groq requests numpy scikit-learn
 
 $pipList = (& $PYTHON_VENV -m pip list --format=freeze 2>$null) -join "`n"
 if ($pipList -notmatch "(?i)^torch==") {

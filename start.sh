@@ -69,7 +69,7 @@ elif docker ps -a --filter "name=^${CONTAINER}$" --format '{{.Names}}' 2>/dev/nu
     docker start "$CONTAINER" > /dev/null
     ok "MySQL démarré."
 else
-    fail "Conteneur '$CONTAINER' introuvable. Créez-le d'abord avec dockerBuild.sh et dockerRun.sh."
+    fail "Conteneur '$CONTAINER' introuvable. Lance d'abord : ./setup.sh"
 fi
 
 # ---- Arrêter les services existants si déjà lancés ------------------
@@ -93,7 +93,7 @@ source "$VENV/bin/activate"
 
 info "Installation des dépendances Python..."
 pip install --quiet --upgrade pip
-pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql groq requests numpy scikit-learn
+pip install --quiet fastapi "uvicorn[standard]" sqlalchemy pymysql cryptography groq requests numpy scikit-learn
 python3 -c "import torch"        2>/dev/null || pip install torch
 python3 -c "import transformers" 2>/dev/null || pip install transformers
 
