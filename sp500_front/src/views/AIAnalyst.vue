@@ -13,14 +13,13 @@ const filteredCompanies = computed(() =>
     )
 );
 
-function toggleAll() {
-    if (selectedCompanies.value.length === filteredCompanies.value.length && filteredCompanies.value.length > 0) {
-        selectedCompanies.value = selectedCompanies.value.filter(
-            (s) => !filteredCompanies.value.find((c) => c.code === s)
-        );
-    } else {
-        const toAdd = filteredCompanies.value.map((c) => c.code).filter((code) => !selectedCompanies.value.includes(code));
-        selectedCompanies.value = [...selectedCompanies.value, ...toAdd];
+const MAX_COMPANIES = 5;
+
+function toggleCompany(code: string) {
+    if (selectedCompanies.value.includes(code)) {
+        selectedCompanies.value = selectedCompanies.value.filter(s => s !== code);
+    } else if (selectedCompanies.value.length < MAX_COMPANIES) {
+        selectedCompanies.value = [...selectedCompanies.value, code];
     }
 }
 const messages = ref<{ role: string; content: string; chart?: any }[]>([]);
@@ -112,6 +111,8 @@ async function sendMessage() {
 
     try {
         const endpoint = mode.value === "sql" ? "/ask/ia/sqlproxy" : "/ask/ia/analyst";
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 120000);
         const res = await fetch(`http://localhost:${BACK_IA_PORT}${endpoint}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -119,7 +120,9 @@ async function sendMessage() {
                 prompt: userMsg,
                 companies: selectedCompanies.value,
             }),
+            signal: controller.signal,
         });
+        clearTimeout(timeoutId);
         const data = await res.json();
         const msgIndex = messages.value.length;
         messages.value.push({
@@ -131,8 +134,11 @@ async function sendMessage() {
         if (data.raw_data && data.raw_data.length > 1) {
             drawChart(`chart-${msgIndex}`, data.raw_data);
         }
-    } catch (e) {
-        messages.value.push({ role: "assistant", content: "Erreur de connexion au backend IA." });
+    } catch (e: any) {
+        const msg = e?.name === "AbortError"
+            ? "Délai dépassé (120s). Essayez avec moins d'entreprises ou une question plus ciblée."
+            : "Erreur de connexion au backend IA.";
+        messages.value.push({ role: "assistant", content: msg });
     } finally {
         loading.value = false;
     }
@@ -149,8 +155,8 @@ async function sendMessage() {
                 <!-- Header -->
                 <div class="flex items-center justify-between">
                     <span class="text-sm font-semibold">Entreprises</span>
-                    <span class="text-xs text-zinc-400">
-                        {{ selectedCompanies.length }} sélectionnée{{ selectedCompanies.length > 1 ? 's' : '' }}
+                    <span class="text-xs" :class="selectedCompanies.length >= MAX_COMPANIES ? 'text-amber-400 font-semibold' : 'text-zinc-400'">
+                        {{ selectedCompanies.length }} / {{ MAX_COMPANIES }} max
                     </span>
                 </div>
                 <!-- Recherche -->
@@ -160,27 +166,29 @@ async function sendMessage() {
                     placeholder="Rechercher..."
                     class="bg-black rounded px-2 py-1 text-sm outline-none border border-zinc-700 focus:border-zinc-500"
                 />
-                <!-- Tout sélectionner -->
-                <button
-                    @click="toggleAll"
-                    class="text-xs text-left px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 transition-colors text-zinc-400 hover:text-zinc-200"
-                >
-                    {{ selectedCompanies.length === filteredCompanies.length && filteredCompanies.length > 0 ? 'Tout désélectionner' : 'Tout sélectionner' }}
-                    <span class="text-zinc-600">({{ filteredCompanies.length }})</span>
-                </button>
+                <!-- Info limite -->
+                <div class="text-xs text-zinc-500 px-1">
+                    Maximum {{ MAX_COMPANIES }} entreprises pour l'analyse IA
+                </div>
                 <!-- Liste checkboxes -->
                 <div class="overflow-y-auto flex-1 rounded border border-zinc-700 bg-zinc-900">
                     <label
                         v-for="c in filteredCompanies"
                         :key="c.code"
-                        class="flex items-center gap-2 px-3 py-1 cursor-pointer hover:bg-zinc-800 transition-colors"
-                        :class="{ 'bg-zinc-800': selectedCompanies.includes(c.code) }"
+                        class="flex items-center gap-2 px-3 py-1 transition-colors"
+                        :class="[
+                            selectedCompanies.includes(c.code) ? 'bg-zinc-800 cursor-pointer hover:bg-zinc-700' :
+                            selectedCompanies.length >= MAX_COMPANIES ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:bg-zinc-800'
+                        ]"
+                        @click.prevent="toggleCompany(c.code)"
                     >
                         <input
                             type="checkbox"
-                            :value="c.code"
-                            v-model="selectedCompanies"
+                            :checked="selectedCompanies.includes(c.code)"
+                            :disabled="!selectedCompanies.includes(c.code) && selectedCompanies.length >= MAX_COMPANIES"
                             class="accent-green-400 cursor-pointer"
+                            @click.stop
+                            @change="toggleCompany(c.code)"
                         />
                         <span class="text-sm font-mono" :class="selectedCompanies.includes(c.code) ? 'text-green-400' : 'text-zinc-300'">
                             {{ c.code }}

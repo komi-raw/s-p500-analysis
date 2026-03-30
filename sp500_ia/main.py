@@ -109,21 +109,49 @@ async def sql_proxy(req: Request):
     except Exception as e:
         return {"error": str(e)}
 
+@app.post("/ask/ia/sector")
+async def sector_analyst(req: Request):
+    payload = await req.json()
+    try:
+        user_prompt = payload.get("prompt", "")
+
+        system_prompt = """Tu es un expert en analyse financière et boursière du S&P500.
+Tu réponds en français de manière précise et structurée.
+Tu analyses des prédictions ML (PatchTST) par secteur GICS pour identifier :
+- Les meilleures dynamiques haussières
+- Les tendances sectorielles communes
+- Les entreprises sous-performantes
+- Des recommandations d'observation à court terme."""
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ]
+        )
+        return {"response": response.choices[0].message.content}
+    except Exception as e:
+        return {"error": str(e)}
+
+
 @app.post("/ask/ia/analyst")
 async def analyst(req: Request):
     prompt = await req.json()
     try:
         companies = prompt.get("companies", [])
         user_prompt = prompt.get("prompt", "")
-        
+
+        if len(companies) > 5:
+            return {"error": "Maximum 5 entreprises autorisées pour l'analyse IA."}
+
         companies_data = {}
         for company in companies:
             try:
                 res = requests.get(f"http://localhost:8000/api/price/list?code={company}", timeout=10)
                 res.raise_for_status()
                 data = res.json()
-                # Les données sont triées du plus récent au plus ancien → prendre les 50 premiers
-                companies_data[company] = data[:50] if len(data) > 50 else data
+                companies_data[company] = data[:20] if len(data) > 20 else data
             except Exception as e:
                 companies_data[company] = {"error": str(e)}
 
@@ -140,7 +168,7 @@ Quand tu détectes des anomalies, explique pourquoi c'est anormal par rapport au
 
         full_prompt = f"""Entreprises analysées : {', '.join(companies) if companies else 'aucune'}
 Nombre d'entreprises : {len(companies)}
-Données disponibles : {str(companies_data)[:6000]}
+Données disponibles : {str(companies_data)}
 Question : {user_prompt}"""
 
         response = client.chat.completions.create(
