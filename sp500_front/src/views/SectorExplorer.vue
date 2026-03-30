@@ -131,7 +131,7 @@ En tant qu'expert financier, analyse ces prédictions :
 4. Recommandations d'observation à court terme.`;
 
     try {
-        const iaUrl = new URL("/ask/ia/analyst", BACK_DOMAIN);
+        const iaUrl = new URL("/ask/ia/sector", BACK_DOMAIN);
         iaUrl.port = BACK_IA_PORT;
         const res = await fetch(iaUrl.toString(), {
             method: "POST",
